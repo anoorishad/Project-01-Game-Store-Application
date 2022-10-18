@@ -1,8 +1,6 @@
 package com.game_store.Summative1AndrewNoorishadJohnNetzel.controller;
 
-import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.Console;
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.Game;
-import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.ConsoleRepository;
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,6 +59,6 @@ public class GameController {
 
     @GetMapping("/title/{title}")
     public List<Game> getGameByTitle(@PathVariable String title) {
-        return repo.findByESRB(title);
+        return repo.findByTitle(title);
     }
 }
