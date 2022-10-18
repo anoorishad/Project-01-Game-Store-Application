@@ -3,7 +3,6 @@ import GameTable from "./components/GameTable";
 import ConsoleTable from "./components/ConsoleTable";
 import TShirtTable from "./components/TShirtTable";
 import InvoiceTable from "./components/InvoiceTable";
-import GameForm from "./components/GameForm";
 
 import './App.css';
 
@@ -88,10 +87,6 @@ function App() {
       default:
         return <div>Invalid active tab value: {activeTab}</div>
     }
-  }
-
-  function loadActiveRecordIntoGameFormFields(tab) {
-    
   }
 
   return (

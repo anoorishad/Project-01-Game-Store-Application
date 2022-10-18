@@ -43,12 +43,18 @@ function GameTable(props) {
 
     function onFormSubmit(e) {
         e.preventDefault(); // Don't forget this since we're not using the default form behavior
-        //if(selectedRecord) {}
-        fetch("/", {
-            method: "POST",
-            body: {title, esrbRating, description, price, studio, quantity}
-        }).then((response) => console.log(response));
-        console.log("onFormSubmit");
+        if(activeRecordId) {
+            fetch("/", {
+                method: "PUT",
+                body: {id: activeRecordId, title, esrbRating, description, price, studio, quantity}
+            }).then(() => console.log({id: activeRecordId, title, esrbRating, description, price, studio, quantity}));
+        }
+        else {
+            fetch("/", {
+                method: "POST",
+                body: {title, esrbRating, description, price, studio, quantity}
+            }).then(() => console.log({title, esrbRating, description, price, studio, quantity}));
+        }
     }
 
     return <div>
