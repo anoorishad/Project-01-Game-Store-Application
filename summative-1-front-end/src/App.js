@@ -2,6 +2,7 @@ import { useState } from "react";
 import GameTable from "./components/GameTable";
 import ConsoleTable from "./components/ConsoleTable";
 import TShirtTable from "./components/TShirtTable";
+import InvoiceTable from "./components/InvoiceTable";
 
 import './App.css';
 
@@ -30,7 +31,7 @@ function App() {
     {
       id: 1,
       model: "PreyStation",
-      manufacturer: "Sonie",
+      manufacturer: "Sonny",
       memory: "8 GB",
       processor: "Cell Processor 3",
       price: 499.99,
@@ -47,6 +48,19 @@ function App() {
       quantity: 50
     }
   ]);
+  const [invoiceData] = useState([
+    {
+      id: 1,
+      name: "Joe Blow",
+      street: "1234 Main Street",
+      city: "Anytown",
+      state: "AK",
+      zip: 99123,
+      itemType: "Game",
+      itemId: 1,
+      quantity: 2
+    }
+  ]);
 
   return (
     <div className="App">
@@ -57,6 +71,7 @@ function App() {
         <GameTable tableData={gameData}></GameTable>
         <ConsoleTable tableData={consoleData}></ConsoleTable>
         <TShirtTable tableData={tShirtData}></TShirtTable>
+        <InvoiceTable tableData={invoiceData}></InvoiceTable>
       </main>
     </div>
   );
