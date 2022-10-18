@@ -3,6 +3,7 @@ import GameTable from "./components/GameTable";
 import ConsoleTable from "./components/ConsoleTable";
 import TShirtTable from "./components/TShirtTable";
 import InvoiceTable from "./components/InvoiceTable";
+import GameForm from "./components/GameForm";
 
 import './App.css';
 
@@ -75,7 +76,10 @@ function App() {
   function getVisibleTable() {
     switch(activeTab) {
       case "game":
-        return <GameTable tableData={gameData}></GameTable>
+        return <div>
+            <GameTable tableData={gameData}></GameTable>
+            <GameForm></GameForm>
+          </div>
       case "console":
         return <ConsoleTable tableData={consoleData}></ConsoleTable>
       case "t-shirt":
