@@ -7,6 +7,8 @@ import InvoiceTable from "./components/InvoiceTable";
 import './App.css';
 
 function App() {
+  const [activeTab, setActiveTab] = useState("game");
+
   const [gameData] = useState([
     {
       id: 1,
@@ -62,16 +64,42 @@ function App() {
     }
   ]);
 
+  function getViewTabButtonStyle(tabName) {
+    let className = "view-tab";
+    if(activeTab === tabName) {
+      className += " active";
+    }
+    return className;
+  }
+
+  function getVisibleTable() {
+    switch(activeTab) {
+      case "game":
+        return <GameTable tableData={gameData}></GameTable>
+      case "console":
+        return <ConsoleTable tableData={consoleData}></ConsoleTable>
+      case "t-shirt":
+        return <TShirtTable tableData={tShirtData}></TShirtTable>
+      case "invoice":
+        return <InvoiceTable tableData={invoiceData}></InvoiceTable>
+      default:
+        return <div>Invalid active tab value: {activeTab}</div>
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Summative Project 1 Front End</h1>
       </header>
       <main>
-        <GameTable tableData={gameData}></GameTable>
-        <ConsoleTable tableData={consoleData}></ConsoleTable>
-        <TShirtTable tableData={tShirtData}></TShirtTable>
-        <InvoiceTable tableData={invoiceData}></InvoiceTable>
+        <div>
+          <button className={getViewTabButtonStyle("game")} onClick={() => setActiveTab("game")}>Games</button>
+          <button className={getViewTabButtonStyle("console")} onClick={() => setActiveTab("console")}>Consoles</button>
+          <button className={getViewTabButtonStyle("t-shirt")} onClick={() => setActiveTab("t-shirt")}>T-Shirts</button>
+          <button className={getViewTabButtonStyle("invoice")} onClick={() => setActiveTab("invoice")}>Invoices</button>
+        </div>
+        {getVisibleTable()}
       </main>
     </div>
   );
