@@ -64,6 +64,14 @@ function App() {
     }
   ]);
 
+  function getViewTabButtonStyle(tabName) {
+    let className = "view-tab";
+    if(activeTab === tabName) {
+      className += " active";
+    }
+    return className;
+  }
+
   function getVisibleTable() {
     switch(activeTab) {
       case "game":
@@ -86,10 +94,10 @@ function App() {
       </header>
       <main>
         <div>
-          <button onClick={() => setActiveTab("game")}>Games</button>
-          <button onClick={() => setActiveTab("console")}>Consoles</button>
-          <button onClick={() => setActiveTab("t-shirt")}>T-Shirts</button>
-          <button onClick={() => setActiveTab("invoice")}>Invoices</button>
+          <button className={getViewTabButtonStyle("game")} onClick={() => setActiveTab("game")}>Games</button>
+          <button className={getViewTabButtonStyle("console")} onClick={() => setActiveTab("console")}>Consoles</button>
+          <button className={getViewTabButtonStyle("t-shirt")} onClick={() => setActiveTab("t-shirt")}>T-Shirts</button>
+          <button className={getViewTabButtonStyle("invoice")} onClick={() => setActiveTab("invoice")}>Invoices</button>
         </div>
         {getVisibleTable()}
       </main>
