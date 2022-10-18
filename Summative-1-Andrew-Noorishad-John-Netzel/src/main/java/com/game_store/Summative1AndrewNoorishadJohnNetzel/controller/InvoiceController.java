@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,12 +33,12 @@ public class InvoiceController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Invoice addInvoice(@RequestBody Invoice console) {
+    public Invoice addInvoice(@RequestBody @Valid Invoice console) {
         return repo.save(console);
     }
 
     @GetMapping("/name/{name}")
     public List<Invoice> getInvoiceByCustomerName(@PathVariable String name) {
-        return repo.findByCustomerName(name);
+        return repo.findByName(name);
     }
 }

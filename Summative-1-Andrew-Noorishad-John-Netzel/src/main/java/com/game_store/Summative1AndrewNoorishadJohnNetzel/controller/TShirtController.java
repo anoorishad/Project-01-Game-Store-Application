@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,13 +33,13 @@ public class TShirtController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public TShirt addTShirt(@RequestBody TShirt tShirt) {
+    public TShirt addTShirt(@RequestBody @Valid TShirt tShirt) {
         return repo.save(tShirt);
     }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateTShirt(@RequestBody TShirt tShirt) {
+    public void updateTShirt(@RequestBody @Valid TShirt tShirt) {
         repo.save(tShirt);
     }
 

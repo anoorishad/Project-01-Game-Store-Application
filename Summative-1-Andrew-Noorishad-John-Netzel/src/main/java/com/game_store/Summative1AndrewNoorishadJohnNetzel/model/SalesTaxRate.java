@@ -3,8 +3,9 @@ package com.game_store.Summative1AndrewNoorishadJohnNetzel.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -13,8 +14,15 @@ import java.util.Objects;
 @Table(name = "sales_tax_rate")
 public class SalesTaxRate {
 
-    private String state;
+    @Id
+    @Column(name = "sales_tax_rate_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
+    @NotEmpty
+    @Column(unique = true)
+    private String state;
+    @NotNull
     private BigDecimal rate;
 
     public String getState() {

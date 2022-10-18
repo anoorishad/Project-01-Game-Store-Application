@@ -4,6 +4,9 @@ package com.game_store.Summative1AndrewNoorishadJohnNetzel.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -17,17 +20,20 @@ public class Console {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotEmpty
     private String model;
-
+    @NotEmpty
     private String manufacturer;
-
+    @NotEmpty
     @Column(name = "memory_amount")
     private String memoryAmount;
-
+    @NotEmpty
     private String processor;
-
+    @NotNull
+    @PositiveOrZero
     private BigDecimal price;
-
+    @NotNull
+    @PositiveOrZero
     private Integer quantity;
 
     public Integer getId() {

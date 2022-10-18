@@ -9,6 +9,6 @@ import java.util.List;
 public interface GameRepository extends JpaRepository<Game, Integer> {
 
     List<Game> findByStudio(String studio);
-    List<Game> findByESRB(String esrbRating);
+    List<Game> findByEsrbRating(String esrbRating);
     List<Game> findByTitle(String title);
 }
