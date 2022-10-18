@@ -1,6 +1,14 @@
 import './Table.css';
 
 function GameTable(props) {
+    function getRecordClass(row) {
+        const classes = ["record"];
+        if(props.activeRecordId === row.id) {
+            classes.push("active")
+        }
+        return classes.join(" ");
+    }
+
     return <>
         <h2>Games</h2>
         <table>
@@ -17,7 +25,7 @@ function GameTable(props) {
             </thead>
             <tbody>
                 {props.tableData.map(row =>
-                    <tr>
+                    <tr key={row.id} className={getRecordClass(row)} onClick={() => props.setActiveRecordId(row.id)}>
                         <td>{row.id}</td>
                         <td>{row.title}</td>
                         <td>{row.esrbRating}</td>

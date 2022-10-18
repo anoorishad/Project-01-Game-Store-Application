@@ -9,6 +9,7 @@ import './App.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState("game");
+  const [activeRecordId, setActiveRecordId] = useState(0);
 
   const [gameData] = useState([
     {
@@ -77,7 +78,7 @@ function App() {
     switch(activeTab) {
       case "game":
         return <>
-            <GameTable tableData={gameData}></GameTable>
+            <GameTable tableData={gameData} activeRecordId={activeRecordId} setActiveRecordId={setActiveRecordId}></GameTable>
             <GameForm></GameForm>
           </>
       case "console":

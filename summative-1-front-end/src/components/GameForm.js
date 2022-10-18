@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const gameFormPostUrl="/";
+const gameFormPostUrl="http://localhost:8080/";
 
 function GameForm(props) {
     const [title, setTitle] = useState("");
