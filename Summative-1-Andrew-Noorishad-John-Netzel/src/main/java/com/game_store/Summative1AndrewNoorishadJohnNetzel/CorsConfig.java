@@ -5,6 +5,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
+// Source class record store activity
 @Configuration
 @EnableWebMvc
 public class CorsConfig implements WebMvcConfigurer {
