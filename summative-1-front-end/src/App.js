@@ -7,6 +7,8 @@ import InvoiceTable from "./components/InvoiceTable";
 import './App.css';
 
 function App() {
+  const [activeTab, setActiveTab] = useState("game");
+
   const [gameData] = useState([
     {
       id: 1,
@@ -68,6 +70,12 @@ function App() {
         <h1>Summative Project 1 Front End</h1>
       </header>
       <main>
+        <div>
+          <button onClick={() => setActiveTab("game")}>Games</button>
+          <button onClick={() => setActiveTab("console")}>Consoles</button>
+          <button onClick={() => setActiveTab("t-shirt")}>T-Shirts</button>
+          <button onClick={() => setActiveTab("invoice")}>Invoices</button>
+        </div>
         <GameTable tableData={gameData}></GameTable>
         <ConsoleTable tableData={consoleData}></ConsoleTable>
         <TShirtTable tableData={tShirtData}></TShirtTable>
