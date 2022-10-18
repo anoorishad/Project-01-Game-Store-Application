@@ -9,6 +9,15 @@ function GameTable(props) {
         return classes.join(" ");
     }
 
+    function onRecordClick(row) {
+        if(props.activeRecordId === row.id) {
+            props.setActiveRecordId(0);
+        }
+        else {
+            props.setActiveRecordId(row.id);
+        }
+    }
+
     return <>
         <h2>Games</h2>
         <table>
@@ -25,7 +34,7 @@ function GameTable(props) {
             </thead>
             <tbody>
                 {props.tableData.map(row =>
-                    <tr key={row.id} className={getRecordClass(row)} onClick={() => props.setActiveRecordId(row.id)}>
+                    <tr key={row.id} className={getRecordClass(row)} onClick={() => onRecordClick(row)}>
                         <td>{row.id}</td>
                         <td>{row.title}</td>
                         <td>{row.esrbRating}</td>
