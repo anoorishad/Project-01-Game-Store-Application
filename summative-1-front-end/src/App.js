@@ -1,6 +1,7 @@
 import { useState } from "react";
 import GameTable from "./components/GameTable";
 import ConsoleTable from "./components/ConsoleTable";
+import TShirtTable from "./components/TShirtTable";
 
 import './App.css';
 
@@ -36,6 +37,16 @@ function App() {
       quantity: 5
     }
   ]);
+  const [tShirtData] = useState([
+    {
+      id: 1,
+      size: "XL",
+      color: "White",
+      description: "We were too lazy to add dye to this shirt. But it's still a really nice shirt.",
+      price: 6.99,
+      quantity: 50
+    }
+  ]);
 
   return (
     <div className="App">
@@ -45,6 +56,7 @@ function App() {
       <main>
         <GameTable tableData={gameData}></GameTable>
         <ConsoleTable tableData={consoleData}></ConsoleTable>
+        <TShirtTable tableData={tShirtData}></TShirtTable>
       </main>
     </div>
   );
