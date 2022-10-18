@@ -1,3 +1,5 @@
+import './Table.css';
+
 function GameTable(props) {
     return <>
         <h2>Games</h2>
