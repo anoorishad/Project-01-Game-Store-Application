@@ -3,9 +3,9 @@ import { useState } from "react";
 import './Table.css';
 
 function TShirtTable(props) {
-    const [size, setModel] = useState("");
-    const [color, setManufacturer] = useState("");
-    const [description, setMemory] = useState("");
+    const [size, setSize] = useState("");
+    const [color, setColor] = useState("");
+    const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [quantity, setQuantity] = useState("");
     
@@ -22,17 +22,17 @@ function TShirtTable(props) {
     function onRecordClick(row) {
         if(activeRecordId === row.id) {
             setActiveRecordId(0);
-            setModel("");
-            setManufacturer("");
-            setMemory("");
+            setSize("");
+            setColor("");
+            setDescription("");
             setPrice("");
             setQuantity("");
         }
         else {
             setActiveRecordId(row.id);
-            setModel(row.size);
-            setManufacturer(row.color);
-            setMemory(row.description);
+            setSize(row.size);
+            setColor(row.color);
+            setDescription(row.description);
             setPrice(row.price);
             setQuantity(row.quantity);
         }
@@ -81,20 +81,20 @@ function TShirtTable(props) {
         </table>
         <form onSubmit={onFormSubmit}>
             <div>
-                <label htmlFor="title-input">Size</label>
-                <input name="title-input" onChange={(e) => setModel(e.target.value)} value={size}></input>
+                <label htmlFor="size-input">Size</label>
+                <input name="size-input" onChange={(e) => setSize(e.target.value)} value={size}></input>
             </div>
             <div>
-                <label htmlFor="esrb-rating-input">Color</label>
-                <input name="esrb-rating-input" onChange={(e) => setManufacturer(e.target.value)} value={color}></input>
+                <label htmlFor="color-input">Color</label>
+                <input name="color-input" onChange={(e) => setColor(e.target.value)} value={color}></input>
             </div>
             <div>
                 <label htmlFor="description-input">Description</label>
-                <input name="description-input" onChange={(e) => setMemory(e.target.value)} value={description}></input>
+                <input name="description-input" onChange={(e) => setDescription(e.target.value)} value={description}></input>
             </div>
             <div>
-                <label htmlFor="studio-input">Price</label>
-                <input name="studio-input" onChange={(e) => setPrice(e.target.value)} value={price}></input>
+                <label htmlFor="price-input">Price</label>
+                <input name="price-input" onChange={(e) => setPrice(e.target.value)} value={price}></input>
             </div>
             <div>
                 <label htmlFor="quantity-input">Quantity</label>

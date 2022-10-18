@@ -86,24 +86,24 @@ function ConsoleTable(props) {
         </table>
         <form onSubmit={onFormSubmit}>
             <div>
-                <label htmlFor="title-input">Model</label>
-                <input name="title-input" onChange={(e) => setModel(e.target.value)} value={model}></input>
+                <label htmlFor="model-input">Model</label>
+                <input name="model-input" onChange={(e) => setModel(e.target.value)} value={model}></input>
             </div>
             <div>
-                <label htmlFor="esrb-rating-input">Manufacturer</label>
-                <input name="esrb-rating-input" onChange={(e) => setManufacturer(e.target.value)} value={manufacturer}></input>
+                <label htmlFor="manufacturer-input">Manufacturer</label>
+                <input name="manufacturer-input" onChange={(e) => setManufacturer(e.target.value)} value={manufacturer}></input>
             </div>
             <div>
-                <label htmlFor="description-input">Memory</label>
-                <input name="description-input" onChange={(e) => setMemory(e.target.value)} value={memory}></input>
+                <label htmlFor="memory-input">Memory</label>
+                <input name="memory-input" onChange={(e) => setMemory(e.target.value)} value={memory}></input>
             </div>
             <div>
-                <label htmlFor="price-input">Processor</label>
-                <input name="price-input" onChange={(e) => setProcessor(e.target.value)} value={processor}></input>
+                <label htmlFor="processor-input">Processor</label>
+                <input name="processor-input" onChange={(e) => setProcessor(e.target.value)} value={processor}></input>
             </div>
             <div>
-                <label htmlFor="studio-input">Price</label>
-                <input name="studio-input" onChange={(e) => setPrice(e.target.value)} value={price}></input>
+                <label htmlFor="price-input">Price</label>
+                <input name="price-input" onChange={(e) => setPrice(e.target.value)} value={price}></input>
             </div>
             <div>
                 <label htmlFor="quantity-input">Quantity</label>
