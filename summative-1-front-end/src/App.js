@@ -13,6 +13,15 @@ function App() {
       price: 69.99,
       studio: "AwesomeSoft Studios",
       quantity: 2
+    },
+    {
+      id: 2,
+      title: "Mediocre Game",
+      esrbRating: "T",
+      description: "A standard game, with all the positive and negative connotations that apply. Opinion is sharply divided.",
+      price: 29.99,
+      studio: "Some Indie Studio You've Probably Never Heard Of",
+      quantity: 12
     }
   ]);
 
