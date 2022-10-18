@@ -32,19 +32,24 @@ public class ConsoleController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Console addConsole(@RequestBody Console track) {
-        return repo.save(track);
+    public Console addConsole(@RequestBody Console console) {
+        return repo.save(console);
     }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateConsole(@RequestBody Console track) {
-        repo.save(track);
+    public void updateConsole(@RequestBody Console console) {
+        repo.save(console);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteConsole(@PathVariable int id) {
         repo.deleteById(id);
+    }
+
+    @GetMapping("/manufacturer/{manufacturer}")
+    public List<Console> getConsoleByManufacturer(@PathVariable String manufacturer) {
+        return repo.findByManufacturer(manufacturer);
     }
 }
