@@ -23,9 +23,21 @@ function GameTable(props) {
     function onRecordClick(row) {
         if(activeRecordId === row.id) {
             setActiveRecordId(0);
+            setTitle("");
+            setEsrbRating("");
+            setDescription("");
+            setPrice("");
+            setStudio("");
+            setQuantity("");
         }
         else {
             setActiveRecordId(row.id);
+            setTitle(row.title);
+            setEsrbRating(row.esrbRating);
+            setDescription(row.description);
+            setPrice(row.price);
+            setStudio(row.studio);
+            setQuantity(row.quantity);
         }
     }
 
@@ -69,27 +81,27 @@ function GameTable(props) {
         <form onSubmit={onFormSubmit}>
             <div>
                 <label htmlFor="title-input">Title</label>
-                <input name="title-input" onChange={(e) => setTitle(e.target.value)}></input>
+                <input name="title-input" onChange={(e) => setTitle(e.target.value)} value={title}></input>
             </div>
             <div>
                 <label htmlFor="esrb-rating-input">ESRB Rating</label>
-                <input name="esrb-rating-input" onChange={(e) => setEsrbRating(e.target.value)}></input>
+                <input name="esrb-rating-input" onChange={(e) => setEsrbRating(e.target.value)} value={esrbRating}></input>
             </div>
             <div>
                 <label htmlFor="description-input">Description</label>
-                <input name="description-input" onChange={(e) => setDescription(e.target.value)}></input>
+                <input name="description-input" onChange={(e) => setDescription(e.target.value)} value={description}></input>
             </div>
             <div>
                 <label htmlFor="price-input">Price</label>
-                <input name="price-input" onChange={(e) => setPrice(e.target.value)}></input>
+                <input name="price-input" onChange={(e) => setPrice(e.target.value)} value={price}></input>
             </div>
             <div>
                 <label htmlFor="studio-input">Studio</label>
-                <input name="studio-input" onChange={(e) => setStudio(e.target.value)}></input>
+                <input name="studio-input" onChange={(e) => setStudio(e.target.value)} value={studio}></input>
             </div>
             <div>
                 <label htmlFor="quantity-input">Quantity</label>
-                <input name="quantity-input" onChange={(e) => setQuantity(e.target.value)}></input>
+                <input name="quantity-input" onChange={(e) => setQuantity(e.target.value)} value={quantity}></input>
             </div>
             <input type="submit"></input>
         </form>
