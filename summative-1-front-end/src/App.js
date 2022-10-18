@@ -1,5 +1,6 @@
 import { useState } from "react";
 import GameTable from "./components/GameTable";
+import ConsoleTable from "./components/ConsoleTable";
 
 import './App.css';
 
@@ -24,6 +25,17 @@ function App() {
       quantity: 12
     }
   ]);
+  const [consoleData] = useState([
+    {
+      id: 1,
+      model: "PreyStation",
+      manufacturer: "Sonie",
+      memory: "8 GB",
+      processor: "Cell Processor 3",
+      price: 499.99,
+      quantity: 5
+    }
+  ]);
 
   return (
     <div className="App">
@@ -32,6 +44,7 @@ function App() {
       </header>
       <main>
         <GameTable tableData={gameData}></GameTable>
+        <ConsoleTable tableData={consoleData}></ConsoleTable>
       </main>
     </div>
   );
