@@ -9,7 +9,6 @@ import './App.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState("game");
-  const [activeRecordId, setActiveRecordId] = useState(0);
 
   const [gameData] = useState([
     {
@@ -78,8 +77,7 @@ function App() {
     switch(activeTab) {
       case "game":
         return <>
-            <GameTable tableData={gameData} activeRecordId={activeRecordId} setActiveRecordId={setActiveRecordId}></GameTable>
-            <GameForm></GameForm>
+            <GameTable tableData={gameData}></GameTable>
           </>
       case "console":
         return <ConsoleTable tableData={consoleData}></ConsoleTable>
@@ -90,6 +88,10 @@ function App() {
       default:
         return <div>Invalid active tab value: {activeTab}</div>
     }
+  }
+
+  function loadActiveRecordIntoGameFormFields(tab) {
+    
   }
 
   return (
