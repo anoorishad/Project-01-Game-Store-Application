@@ -30,6 +30,7 @@ public class Game {
 
     private String studio;
 
+    private Integer quantity;
 
     public Integer getId() {
         return id;
@@ -79,17 +80,25 @@ public class Game {
         this.studio = studio;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return Objects.equals(id, game.id) && Objects.equals(title, game.title) && Objects.equals(esrbRating, game.esrbRating) && Objects.equals(description, game.description) && Objects.equals(price, game.price) && Objects.equals(studio, game.studio);
+        return Objects.equals(id, game.id) && Objects.equals(title, game.title) && Objects.equals(esrbRating, game.esrbRating) && Objects.equals(description, game.description) && Objects.equals(price, game.price) && Objects.equals(studio, game.studio) && Objects.equals(quantity, game.quantity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, esrbRating, description, price, studio);
+        return Objects.hash(id, title, esrbRating, description, price, studio, quantity);
     }
 
     @Override
@@ -101,6 +110,7 @@ public class Game {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", studio='" + studio + '\'' +
+                ", quantity=" + quantity +
                 '}';
     }
 }
