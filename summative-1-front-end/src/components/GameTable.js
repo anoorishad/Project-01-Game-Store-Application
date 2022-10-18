@@ -1,7 +1,63 @@
+import { useState } from "react";
+
 import './Table.css';
 
 function GameTable(props) {
-    return <>
+    const [title, setTitle] = useState("");
+    const [esrbRating, setEsrbRating] = useState("");
+    const [description, setDescription] = useState("");
+    const [price, setPrice] = useState("");
+    const [studio, setStudio] = useState("");
+    const [quantity, setQuantity] = useState("");
+    
+    const [activeRecordId, setActiveRecordId] = useState(0);
+
+    function getRecordClass(row) {
+        const classes = ["record"];
+        if(activeRecordId === row.id) {
+            classes.push("active")
+        }
+        return classes.join(" ");
+    }
+
+    function onRecordClick(row) {
+        if(activeRecordId === row.id) {
+            setActiveRecordId(0);
+            setTitle("");
+            setEsrbRating("");
+            setDescription("");
+            setPrice("");
+            setStudio("");
+            setQuantity("");
+        }
+        else {
+            setActiveRecordId(row.id);
+            setTitle(row.title);
+            setEsrbRating(row.esrbRating);
+            setDescription(row.description);
+            setPrice(row.price);
+            setStudio(row.studio);
+            setQuantity(row.quantity);
+        }
+    }
+
+    function onFormSubmit(e) {
+        e.preventDefault(); // Don't forget this since we're not using the default form behavior
+        if(activeRecordId) {
+            fetch("/", {
+                method: "PUT",
+                body: {id: activeRecordId, title, esrbRating, description, price, studio, quantity}
+            }).then(() => console.log({id: activeRecordId, title, esrbRating, description, price, studio, quantity}));
+        }
+        else {
+            fetch("/", {
+                method: "POST",
+                body: {title, esrbRating, description, price, studio, quantity}
+            }).then(() => console.log({title, esrbRating, description, price, studio, quantity}));
+        }
+    }
+
+    return <div>
         <h2>Games</h2>
         <table>
             <thead>
@@ -17,7 +73,7 @@ function GameTable(props) {
             </thead>
             <tbody>
                 {props.tableData.map(row =>
-                    <tr>
+                    <tr key={row.id} className={getRecordClass(row)} onClick={() => onRecordClick(row)}>
                         <td>{row.id}</td>
                         <td>{row.title}</td>
                         <td>{row.esrbRating}</td>
@@ -28,7 +84,34 @@ function GameTable(props) {
                     </tr>)}
             </tbody>
         </table>
-    </>
+        <form onSubmit={onFormSubmit}>
+            <div>
+                <label htmlFor="title-input">Title</label>
+                <input name="title-input" onChange={(e) => setTitle(e.target.value)} value={title}></input>
+            </div>
+            <div>
+                <label htmlFor="esrb-rating-input">ESRB Rating</label>
+                <input name="esrb-rating-input" onChange={(e) => setEsrbRating(e.target.value)} value={esrbRating}></input>
+            </div>
+            <div>
+                <label htmlFor="description-input">Description</label>
+                <input name="description-input" onChange={(e) => setDescription(e.target.value)} value={description}></input>
+            </div>
+            <div>
+                <label htmlFor="price-input">Price</label>
+                <input name="price-input" onChange={(e) => setPrice(e.target.value)} value={price}></input>
+            </div>
+            <div>
+                <label htmlFor="studio-input">Studio</label>
+                <input name="studio-input" onChange={(e) => setStudio(e.target.value)} value={studio}></input>
+            </div>
+            <div>
+                <label htmlFor="quantity-input">Quantity</label>
+                <input name="quantity-input" onChange={(e) => setQuantity(e.target.value)} value={quantity}></input>
+            </div>
+            <input type="submit"></input>
+        </form>
+    </div>
 }
 
 export default GameTable;
