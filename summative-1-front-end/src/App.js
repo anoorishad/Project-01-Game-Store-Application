@@ -76,10 +76,10 @@ function App() {
   function getVisibleTable() {
     switch(activeTab) {
       case "game":
-        return <div>
+        return <>
             <GameTable tableData={gameData}></GameTable>
             <GameForm></GameForm>
-          </div>
+          </>
       case "console":
         return <ConsoleTable tableData={consoleData}></ConsoleTable>
       case "t-shirt":
@@ -103,7 +103,9 @@ function App() {
           <button className={getViewTabButtonStyle("t-shirt")} onClick={() => setActiveTab("t-shirt")}>T-Shirts</button>
           <button className={getViewTabButtonStyle("invoice")} onClick={() => setActiveTab("invoice")}>Invoices</button>
         </div>
-        {getVisibleTable()}
+        <div>
+          {getVisibleTable()}
+        </div>
       </main>
     </div>
   );

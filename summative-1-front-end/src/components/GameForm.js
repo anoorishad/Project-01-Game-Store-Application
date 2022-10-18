@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const gameFormPostUrl="/";
+
 function GameForm(props) {
     const [title, setTitle] = useState("");
     const [esrbRating, setEsrbRating] = useState("");
@@ -8,7 +10,17 @@ function GameForm(props) {
     const [studio, setStudio] = useState("");
     const [quantity, setQuantity] = useState("");
 
-    return <form onSubmit={() => alert(title)}>
+    function onFormSubmit(e) {
+        e.preventDefault(); // Don't forget this since we're not using the default form behavior
+        //if(selectedRecord) {}
+        fetch(gameFormPostUrl, {
+            method: "POST",
+            body: {title, esrbRating, description, price, studio, quantity}
+        }).then((response) => console.log(response));
+        console.log("onFormSubmit");
+    }
+
+    return <form onSubmit={onFormSubmit}>
         <div>
             <label htmlFor="title-input">Title</label>
             <input name="title-input" onChange={(e) => setTitle(e.target.value)}></input>
