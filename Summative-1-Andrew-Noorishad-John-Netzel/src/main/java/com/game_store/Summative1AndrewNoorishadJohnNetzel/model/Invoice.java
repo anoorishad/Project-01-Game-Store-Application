@@ -4,6 +4,9 @@ package com.game_store.Summative1AndrewNoorishadJohnNetzel.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -17,34 +20,51 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotEmpty
     private String name;
 
+    @NotEmpty
     private String street;
 
+    @NotEmpty
     private String city;
 
+    @NotEmpty
     private String state;
 
+    @NotEmpty
     private String zipcode;
 
+    @NotEmpty
     @Column(name = "item_type")
     private String itemType;
 
+    @NotNull
     @Column(name = "item_id")
     private Integer itemId;
-
+    @NotNull
+    @PositiveOrZero
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
-
+    @NotNull
+    @PositiveOrZero
     private Integer quantity;
 
+    @NotNull
+    @PositiveOrZero
     private BigDecimal subtotal;
 
+    @NotNull
+    @PositiveOrZero
     private BigDecimal tax;
 
+    @NotNull
+    @PositiveOrZero
     @Column(name = "processing_fee")
     private BigDecimal processingFee;
 
+    @NotNull
+    @PositiveOrZero
     private BigDecimal total;
 
     public Integer getId() {

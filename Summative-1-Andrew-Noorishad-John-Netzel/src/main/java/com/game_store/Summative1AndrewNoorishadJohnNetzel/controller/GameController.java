@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,13 +32,13 @@ public class GameController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Game addGame(@RequestBody Game game) {
+    public Game addGame(@RequestBody @Valid Game game) {
         return repo.save(game);
     }
 
     @PutMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateGame(@RequestBody Game game) {
+    public void updateGame(@RequestBody @Valid Game game) {
         repo.save(game);
     }
 
@@ -53,8 +54,8 @@ public class GameController {
     }
 
     @GetMapping("/esrb/{esrb}")
-    public List<Game> getGameByESRB(@PathVariable String esrbRating) {
-        return repo.findByESRB(esrbRating);
+    public List<Game> getGameByEsrbRating(@PathVariable String esrbRating) {
+        return repo.findByEsrbRating(esrbRating);
     }
 
     @GetMapping("/title/{title}")

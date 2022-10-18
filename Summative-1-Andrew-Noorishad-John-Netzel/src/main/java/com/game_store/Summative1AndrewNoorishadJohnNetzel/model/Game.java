@@ -4,6 +4,9 @@ package com.game_store.Summative1AndrewNoorishadJohnNetzel.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -17,19 +20,21 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
+    @NotEmpty
+    @Column(unique=true)
     private String title;
-
-
+    @NotEmpty
     @Column(name = "esrb_rating")
     private String esrbRating;
-
+    @NotEmpty
     private String description;
-
+    @NotNull
+    @PositiveOrZero
     private BigDecimal price;
-
+    @NotEmpty
     private String studio;
-
+    @NotNull
+    @PositiveOrZero
     private Integer quantity;
 
     public Integer getId() {

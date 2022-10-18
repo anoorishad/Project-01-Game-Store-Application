@@ -2,9 +2,8 @@ package com.game_store.Summative1AndrewNoorishadJohnNetzel.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -13,7 +12,12 @@ import java.util.Objects;
 @Table(name = "processing_fee")
 public class ProcessingFee {
 
-    @Column(name = "product_type")
+    @Id
+    @Column(name = "processing_fee_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @NotEmpty
+    @Column(name = "product_type", unique = true)
     private String productType;
 
     private BigDecimal fee;
