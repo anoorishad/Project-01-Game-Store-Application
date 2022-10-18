@@ -16,15 +16,16 @@ function GameTable(props) {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>The Bestest Game EVAR!!!</td>
-                    <td>M</td>
-                    <td>The only game you'll ever need to play. Seriously. Why are you still reading this? Go buy it already!</td>
-                    <td>69.99</td>
-                    <td>AwesomeSoft Studios</td>
-                    <td>2</td>
-                </tr>
+                {props.tableData.map(row =>
+                    <tr>
+                        <td>{row.id}</td>
+                        <td>{row.title}</td>
+                        <td>{row.esrbRating}</td>
+                        <td>{row.description}</td>
+                        <td>{row.price}</td>
+                        <td>{row.studio}</td>
+                        <td>{row.quantity}</td>
+                    </tr>)}
             </tbody>
         </table>
     </>
