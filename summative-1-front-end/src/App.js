@@ -64,6 +64,21 @@ function App() {
     }
   ]);
 
+  function getVisibleTable() {
+    switch(activeTab) {
+      case "game":
+        return <GameTable tableData={gameData}></GameTable>
+      case "console":
+        return <ConsoleTable tableData={consoleData}></ConsoleTable>
+      case "t-shirt":
+        return <TShirtTable tableData={tShirtData}></TShirtTable>
+      case "invoice":
+        return <InvoiceTable tableData={invoiceData}></InvoiceTable>
+      default:
+        return <div>Invalid active tab value: {activeTab}</div>
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -76,10 +91,7 @@ function App() {
           <button onClick={() => setActiveTab("t-shirt")}>T-Shirts</button>
           <button onClick={() => setActiveTab("invoice")}>Invoices</button>
         </div>
-        <GameTable tableData={gameData}></GameTable>
-        <ConsoleTable tableData={consoleData}></ConsoleTable>
-        <TShirtTable tableData={tShirtData}></TShirtTable>
-        <InvoiceTable tableData={invoiceData}></InvoiceTable>
+        {getVisibleTable()}
       </main>
     </div>
   );
