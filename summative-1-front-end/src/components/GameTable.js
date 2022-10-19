@@ -97,7 +97,7 @@ function GameTable(props) {
 
     function onDeleteButtonClicked(e, row) {
         e.stopPropagation(); // Don't let event propagate to record for selection/activation
-        fetch("http://localhost:8080/games/" + activeRecordId, {
+        fetch("http://localhost:8080/games/" + row.id, {
             method: "DELETE"
         })
         .then(response => {
