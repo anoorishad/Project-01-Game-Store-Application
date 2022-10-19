@@ -71,6 +71,7 @@ function GameTable(props) {
                             response.json().then(resData => {
                                 const newData = [...data].filter((value) => value.id !== resData.id); // filter out the old record that is being updated...
                                 newData.push(resData); // ...and put the new version of it in
+                                newData.sort((a, b) => a.id - b.id); // Sort by ID
                                 setData(newData);
                             });
                         }
