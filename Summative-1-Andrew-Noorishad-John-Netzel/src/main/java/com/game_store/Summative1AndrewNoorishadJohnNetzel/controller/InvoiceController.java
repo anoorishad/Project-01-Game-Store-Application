@@ -3,6 +3,7 @@ package com.game_store.Summative1AndrewNoorishadJohnNetzel.controller;
 
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.Invoice;
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.InvoiceRepository;
+import com.game_store.Summative1AndrewNoorishadJohnNetzel.service.ServiceLayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class InvoiceController {
 
     @Autowired
     InvoiceRepository repo;
+
+    @Autowired
+    private ServiceLayer serviceLayer;
 
     @GetMapping()
     public List<Invoice> getInvoices() {return repo.findAll();}
@@ -33,8 +37,8 @@ public class InvoiceController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Invoice addInvoice(@RequestBody @Valid Invoice console) {
-        return repo.save(console);
+    public Invoice addInvoice(@RequestBody @Valid Invoice invoice) {
+        return serviceLayer.addInvoice(invoice);
     }
 
     @GetMapping("/name/{name}")

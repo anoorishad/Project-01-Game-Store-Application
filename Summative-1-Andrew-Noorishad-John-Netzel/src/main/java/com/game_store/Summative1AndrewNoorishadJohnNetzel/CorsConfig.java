@@ -5,7 +5,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
+// Originally written by Dan Mueller for Cognizant Java Bootcamp
 // Source class record store activity
 @Configuration
 @EnableWebMvc

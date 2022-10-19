@@ -13,9 +13,6 @@ import java.util.Objects;
 public class ProcessingFee {
 
     @Id
-    @Column(name = "processing_fee_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     @NotEmpty
     @Column(name = "product_type", unique = true)
     private String productType;
