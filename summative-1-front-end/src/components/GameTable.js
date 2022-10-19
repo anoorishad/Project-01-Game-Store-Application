@@ -64,15 +64,13 @@ function GameTable(props) {
             })
             .then((response) => {
                 if(response.ok) {
-                    console.log("Posted!");
+                    response.json().then(resData => setData([...data, resData]))
                 }
                 else {
-                    console.log("Error while posting!");
+                    console.log(response.status);
+                    alert("Error while creating record!");
                 }
             })
-            // .then((response) => response.json()
-            // .then(data => {console.log("data", data);setData(data)}))
-            // .catch(error => console.error(error));
         }
     }
 
