@@ -12,6 +12,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ServiceLayer {
+    private InvoiceRepository invoiceRepository;
     private TaxRateRepository taxRateRepository;
     private ProcessingFeeRepository processingFeeRepository;
     private GameRepository gameRepository;
@@ -19,9 +20,9 @@ public class ServiceLayer {
     private TShirtRepository tShirtRepository;
 
     @Autowired
-    public ServiceLayer(TaxRateRepository taxRateRepository, ProcessingFeeRepository processingFeeRepository,
-                        GameRepository gameRepository, ConsoleRepository consoleRepository,
-                        TShirtRepository tShirtRepository) {
+    public ServiceLayer(InvoiceRepository invoiceRepository, TaxRateRepository taxRateRepository, ProcessingFeeRepository processingFeeRepository,
+                        GameRepository gameRepository, ConsoleRepository consoleRepository, TShirtRepository tShirtRepository) {
+        this.invoiceRepository = invoiceRepository;
         this.taxRateRepository = taxRateRepository;
         this.processingFeeRepository = processingFeeRepository;
         this.gameRepository = gameRepository;
@@ -29,7 +30,17 @@ public class ServiceLayer {
         this.tShirtRepository = tShirtRepository;
     }
 
-    public void calculateSubtotal(Invoice invoice) {
+    public void addInvoice(Invoice invoice) {
+        calculateSubtotal(invoice);
+        calculateSalesTax(invoice);
+        calculateProcessingFee(invoice);
+        calculateTotal(invoice);
+        updateInStockQuantity(invoice);
+
+        invoiceRepository.save(invoice);
+    }
+
+    private void calculateSubtotal(Invoice invoice) {
         BigDecimal subtotal = getItemPrice(invoice.getItemType(), invoice.getItemId());
         subtotal = subtotal.multiply(BigDecimal.valueOf(invoice.getQuantity()));
         invoice.setSubtotal(subtotal);
@@ -60,7 +71,7 @@ public class ServiceLayer {
         }
     }
 
-    public void calculateSalesTax(Invoice invoice) {
+    private void calculateSalesTax(Invoice invoice) {
         String state = invoice.getState(); // Read state from invoice
         Optional<SalesTaxRate> taxRateRecord = taxRateRepository.findById(state); // Query DB for sales tax by state name
         if(!taxRateRecord.isPresent()) { // If no sales tax record is found...
@@ -71,7 +82,7 @@ public class ServiceLayer {
         invoice.setTax(tax); // Load value into invoice
     }
 
-    public void calculateProcessingFee(Invoice invoice) {
+    private void calculateProcessingFee(Invoice invoice) {
         String productType = invoice.getItemType();
         Optional<ProcessingFee> processingFeeRecord = processingFeeRepository.findById(productType);
         if(!processingFeeRecord.isPresent()) {
@@ -85,12 +96,41 @@ public class ServiceLayer {
         invoice.setProcessingFee(processingFee); // Load value into invoice
     }
 
-    public void calculateTotal(Invoice invoice) {
+    private void calculateTotal(Invoice invoice) {
         BigDecimal total = invoice.getSubtotal();
         total = total.add(invoice.getTax());
         total = total.add(invoice.getProcessingFee());
         invoice.setTotal(total);
     }
 
-    //public void updateInStockQuantity
+    private void updateInStockQuantity(Invoice invoice) {
+        switch(invoice.getItemType()) {
+            case "Game":
+                Optional<Game> game = gameRepository.findById(invoice.getItemId());
+                if(game.isPresent()) {
+                    Game actualGame = game.get();
+                    actualGame.setQuantity(actualGame.getQuantity() - invoice.getQuantity());
+                    gameRepository.save(actualGame);
+                }
+                throw new RuntimeException("Game with ID of " + invoice.getItemId() + " not found!");
+            case "Console":
+                Optional<Console> console = consoleRepository.findById(invoice.getItemId());
+                if(console.isPresent()) {
+                    Console actualConsole = console.get();
+                    actualConsole.setQuantity(actualConsole.getQuantity() - invoice.getQuantity());
+                    consoleRepository.save(actualConsole);
+                }
+                throw new RuntimeException("Console with ID of " + invoice.getItemId() + " not found!");
+            case "T-Shirt":
+                Optional<TShirt> tShirt = tShirtRepository.findById(invoice.getItemId());
+                if(tShirt.isPresent()) {
+                    TShirt actualTShirt = tShirt.get();
+                    actualTShirt.setQuantity(actualTShirt.getQuantity() - invoice.getQuantity());
+                    tShirtRepository.save(actualTShirt);
+                }
+                throw new RuntimeException("T-Shirt with ID of " + invoice.getItemId() + " not found!");
+            default:
+                throw new IllegalArgumentException("Invalid itemType: " + invoice.getItemType());
+        }
+    }
 }
