@@ -14,11 +14,6 @@ import java.util.Objects;
 @Table(name = "sales_tax_rate")
 public class SalesTaxRate {
 
-//    @Id
-//    @Column(name = "sales_tax_rate_id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Integer id;
-
     @Id
     @NotEmpty
     @Column(unique = true)

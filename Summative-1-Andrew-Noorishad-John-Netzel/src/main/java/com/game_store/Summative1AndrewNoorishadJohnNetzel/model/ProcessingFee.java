@@ -12,11 +12,6 @@ import java.util.Objects;
 @Table(name = "processing_fee")
 public class ProcessingFee {
 
-//    @Id
-//    @Column(name = "processing_fee_id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Integer id;
-
     @Id
     @NotEmpty
     @Column(name = "product_type", unique = true)
