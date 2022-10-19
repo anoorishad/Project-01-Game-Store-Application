@@ -57,10 +57,22 @@ function GameTable(props) {
             }).then(() => console.log({id: activeRecordId, title, esrbRating, description, price, studio, quantity}));
         }
         else {
-            fetch("/", {
+            fetch("http://localhost:8080/games", {
                 method: "POST",
-                body: {title, esrbRating, description, price, studio, quantity}
-            }).then(() => console.log({title, esrbRating, description, price, studio, quantity}));
+                body: JSON.stringify({title, esrbRating, description, price, studio, quantity}),
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if(response.ok) {
+                    console.log("Posted!");
+                }
+                else {
+                    console.log("Error while posting!");
+                }
+            })
+            // .then((response) => response.json()
+            // .then(data => {console.log("data", data);setData(data)}))
+            // .catch(error => console.error(error));
         }
     }
 
