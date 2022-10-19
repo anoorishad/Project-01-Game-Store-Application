@@ -1,10 +1,7 @@
 package com.game_store.Summative1AndrewNoorishadJohnNetzel.service;
 
-import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.Invoice;
-import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.ProcessingFee;
-import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.SalesTaxRate;
-import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.ProcessingFeeRepository;
-import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.TaxRateRepository;
+import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.*;
+import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +14,50 @@ import java.util.Optional;
 public class ServiceLayer {
     private TaxRateRepository taxRateRepository;
     private ProcessingFeeRepository processingFeeRepository;
+    private GameRepository gameRepository;
+    private ConsoleRepository consoleRepository;
+    private TShirtRepository tShirtRepository;
 
     @Autowired
-    public ServiceLayer(TaxRateRepository taxRateRepository, ProcessingFeeRepository processingFeeRepository) {
+    public ServiceLayer(TaxRateRepository taxRateRepository, ProcessingFeeRepository processingFeeRepository,
+                        GameRepository gameRepository, ConsoleRepository consoleRepository,
+                        TShirtRepository tShirtRepository) {
         this.taxRateRepository = taxRateRepository;
         this.processingFeeRepository = processingFeeRepository;
+        this.gameRepository = gameRepository;
+        this.consoleRepository = consoleRepository;
+        this.tShirtRepository = tShirtRepository;
+    }
+
+    public void calculateSubtotal(Invoice invoice) {
+        BigDecimal subtotal = getItemPrice(invoice.getItemType(), invoice.getItemId());
+        subtotal = subtotal.multiply(BigDecimal.valueOf(invoice.getQuantity()));
+        invoice.setSubtotal(subtotal);
+    }
+
+    private BigDecimal getItemPrice(String itemType, Integer itemId) {
+        switch(itemType) {
+            case "Game":
+                Optional<Game> game = gameRepository.findById(itemId);
+                if(game.isPresent()) {
+                    return game.get().getPrice();
+                }
+                throw new RuntimeException("Game with ID of " + itemId + " not found!");
+            case "Console":
+                Optional<Console> console = consoleRepository.findById(itemId);
+                if(console.isPresent()) {
+                    return console.get().getPrice();
+                }
+                throw new RuntimeException("Console with ID of " + itemId + " not found!");
+            case "T-Shirt":
+                Optional<TShirt> tShirt = tShirtRepository.findById(itemId);
+                if(tShirt.isPresent()) {
+                    return tShirt.get().getPrice();
+                }
+                throw new RuntimeException("T-Shirt with ID of " + itemId + " not found!");
+            default:
+                throw new IllegalArgumentException("Invalid itemType: " + itemType);
+        }
     }
 
     public void calculateSalesTax(Invoice invoice) {
@@ -48,4 +84,13 @@ public class ServiceLayer {
         }
         invoice.setProcessingFee(processingFee); // Load value into invoice
     }
+
+    public void calculateTotal(Invoice invoice) {
+        BigDecimal total = invoice.getSubtotal();
+        total = total.add(invoice.getTax());
+        total = total.add(invoice.getProcessingFee());
+        invoice.setTotal(total);
+    }
+
+    //public void updateInStockQuantity
 }
