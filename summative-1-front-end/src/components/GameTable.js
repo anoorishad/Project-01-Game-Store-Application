@@ -51,10 +51,38 @@ function GameTable(props) {
     function onFormSubmit(e) {
         e.preventDefault(); // Don't forget this since we're not using the default form behavior
         if(activeRecordId) {
-            fetch("/", {
+            fetch("http://localhost:8080/games", {
                 method: "PUT",
-                body: {id: activeRecordId, title, esrbRating, description, price, studio, quantity}
-            }).then(() => console.log({id: activeRecordId, title, esrbRating, description, price, studio, quantity}));
+                body: JSON.stringify({id: activeRecordId, title, esrbRating, description, price, studio, quantity}),
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if(response.ok) {
+                    // response.json().then(resData => {
+                    //     console.log(resData);
+                    //     const newData = [...data];
+                    //     newData.filter((value) => value.id !== resData.id) // filter out the old record that is being updated...
+                    //     .push(resData); // ...and put the new version of it in
+                    //     setData(newData);
+                    // })
+                    fetch("http://localhost:8080/games/" + activeRecordId)
+                    .then(response => {
+                        if(response.ok) {
+                            response.json().then(resData => {
+                                const newData = [...data].filter((value) => value.id !== resData.id); // filter out the old record that is being updated...
+                                newData.push(resData); // ...and put the new version of it in
+                                setData(newData);
+                            });
+                        }
+                        else {
+                            alert("Error while getting record!");
+                        }
+                    });
+                }
+                else {
+                    alert("Error while updating record!");
+                }
+            });
         }
         else {
             fetch("http://localhost:8080/games", {
@@ -67,10 +95,9 @@ function GameTable(props) {
                     response.json().then(resData => setData([...data, resData]))
                 }
                 else {
-                    console.log(response.status);
                     alert("Error while creating record!");
                 }
-            })
+            });
         }
     }
 
