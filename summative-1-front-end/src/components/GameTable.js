@@ -58,13 +58,6 @@ function GameTable(props) {
             })
             .then((response) => {
                 if(response.ok) {
-                    // response.json().then(resData => {
-                    //     console.log(resData);
-                    //     const newData = [...data];
-                    //     newData.filter((value) => value.id !== resData.id) // filter out the old record that is being updated...
-                    //     .push(resData); // ...and put the new version of it in
-                    //     setData(newData);
-                    // })
                     fetch("http://localhost:8080/games/" + activeRecordId)
                     .then(response => {
                         if(response.ok) {
@@ -102,6 +95,23 @@ function GameTable(props) {
         }
     }
 
+    function onDeleteButtonClicked(e, row) {
+        e.stopPropagation(); // Don't let event propagate to record for selection/activation
+        fetch("http://localhost:8080/games/" + activeRecordId, {
+            method: "DELETE"
+        })
+        .then(response => {
+            if(response.ok) {
+                const newData = [...data].filter((value) => value.id !== row.id); // filter out the record that is being deleted
+                setData(newData);
+                setActiveRecordId(0); // Don't forget to deselect the record
+            }
+            else {
+                alert("Error while deleting record!");
+            }
+        })
+    }
+
     return <div>
         <h2>Games</h2>
         <table>
@@ -126,6 +136,7 @@ function GameTable(props) {
                         <td>{row.price}</td>
                         <td>{row.studio}</td>
                         <td>{row.quantity}</td>
+                        <td><button onClick={(e) => onDeleteButtonClicked(e, row)}>Delete</button></td>
                     </tr>)}
             </tbody>
         </table>
