@@ -30,14 +30,14 @@ public class ServiceLayer {
         this.tShirtRepository = tShirtRepository;
     }
 
-    public void addInvoice(Invoice invoice) {
+    public Invoice addInvoice(Invoice invoice) {
         calculateSubtotal(invoice);
         calculateSalesTax(invoice);
         calculateProcessingFee(invoice);
         calculateTotal(invoice);
         updateInStockQuantity(invoice);
 
-        invoiceRepository.save(invoice);
+        return invoiceRepository.save(invoice);
     }
 
     private void calculateSubtotal(Invoice invoice) {
