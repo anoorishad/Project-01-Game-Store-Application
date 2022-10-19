@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import './Table.css';
 
 function GameTable(props) {
+    const [data, setData] = useState([]);
     const [title, setTitle] = useState("");
     const [esrbRating, setEsrbRating] = useState("");
     const [description, setDescription] = useState("");
@@ -11,6 +12,12 @@ function GameTable(props) {
     const [quantity, setQuantity] = useState("");
     
     const [activeRecordId, setActiveRecordId] = useState(0);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/games")
+        .then((response) => response.json()
+        .then((responseBody) => setData(responseBody)))
+    }, []);
 
     function getRecordClass(row) {
         const classes = ["record"];
@@ -72,7 +79,7 @@ function GameTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.tableData.map(row =>
+                {data.map(row =>
                     <tr key={row.id} className={getRecordClass(row)} onClick={() => onRecordClick(row)}>
                         <td>{row.id}</td>
                         <td>{row.title}</td>
