@@ -36,6 +36,17 @@ public class Console {
     @PositiveOrZero
     private Integer quantity;
 
+    public Console(){};
+
+    public Console(String model, String manufacturer, String memoryAmount, String processor, BigDecimal price, Integer quantity) {
+        this.model = model;
+        this.manufacturer = manufacturer;
+        this.memoryAmount = memoryAmount;
+        this.processor = processor;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public Integer getId() {
         return id;
     }

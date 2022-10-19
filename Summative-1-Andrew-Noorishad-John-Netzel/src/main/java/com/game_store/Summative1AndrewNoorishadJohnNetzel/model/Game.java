@@ -37,6 +37,18 @@ public class Game {
     @PositiveOrZero
     private Integer quantity;
 
+    public Game() {
+    }
+
+    public Game(String title, String esrbRating, String description, BigDecimal price, String studio, Integer quantity) {
+        this.title = title;
+        this.esrbRating = esrbRating;
+        this.description = description;
+        this.price = price;
+        this.studio = studio;
+        this.quantity = quantity;
+    }
+
     public Integer getId() {
         return id;
     }
