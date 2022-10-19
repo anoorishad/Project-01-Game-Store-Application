@@ -6,14 +6,16 @@ import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.ProcessingF
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.TaxRateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
+@RestController
 public class DataLoaderController {
     @Autowired
-    private TaxRateRepository taxRateRepo;
+    TaxRateRepository taxRateRepo;
     @Autowired
-    private ProcessingFeeRepository processingFeeRepository;
+    ProcessingFeeRepository processingFeeRepository;
 
     @GetMapping("/load-data")
     public void loadData() {

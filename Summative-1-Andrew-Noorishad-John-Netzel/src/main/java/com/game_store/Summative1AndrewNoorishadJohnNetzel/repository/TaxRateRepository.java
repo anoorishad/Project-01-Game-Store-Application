@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TaxRateRepository extends JpaRepository<SalesTaxRate, Integer> {
+public interface TaxRateRepository extends JpaRepository<SalesTaxRate, String> {
     List<Invoice> findByState(String state);
 }
