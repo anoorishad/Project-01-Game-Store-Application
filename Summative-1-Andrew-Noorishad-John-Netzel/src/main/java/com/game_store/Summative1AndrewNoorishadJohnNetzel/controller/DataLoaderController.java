@@ -1,6 +1,8 @@
 package com.game_store.Summative1AndrewNoorishadJohnNetzel.controller;
 
+import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.ProcessingFee;
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.SalesTaxRate;
+import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.ProcessingFeeRepository;
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.TaxRateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,8 @@ import java.math.BigDecimal;
 public class DataLoaderController {
     @Autowired
     private TaxRateRepository taxRateRepo;
+    @Autowired
+    private ProcessingFeeRepository processingFeeRepository;
 
     @GetMapping("/load-data")
     public void loadData() {
@@ -262,5 +266,20 @@ public class DataLoaderController {
         stateTax.setState("WY");
         stateTax.setRate(BigDecimal.valueOf(0.04));
         taxRateRepo.save(stateTax);
+
+        ProcessingFee processingFee = new ProcessingFee();
+        processingFee.setProductType("Consoles");
+        processingFee.setFee(BigDecimal.valueOf(14.99));
+        processingFeeRepository.save(processingFee);
+
+        processingFee = new ProcessingFee();
+        processingFee.setProductType("T-shirts");
+        processingFee.setFee(BigDecimal.valueOf(1.98));
+        processingFeeRepository.save(processingFee);
+
+        processingFee = new ProcessingFee();
+        processingFee.setProductType("Games");
+        processingFee.setFee(BigDecimal.valueOf(1.49));
+        processingFeeRepository.save(processingFee);
     }
 }
