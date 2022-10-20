@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import './Table.css';
 
 function ConsoleTable(props) {
+    const [data, setData] = useState([]);
+
     const [model, setModel] = useState("");
     const [manufacturer, setManufacturer] = useState("");
     const [memory, setMemory] = useState("");
@@ -11,6 +13,12 @@ function ConsoleTable(props) {
     const [quantity, setQuantity] = useState("");
     
     const [activeRecordId, setActiveRecordId] = useState(0);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/consoles")
+        .then((response) => response.json()
+        .then((responseBody) => setData(responseBody)))
+    }, []);
 
     function getRecordClass(row) {
         const classes = ["record"];
@@ -46,14 +54,24 @@ function ConsoleTable(props) {
         if(activeRecordId) {
             fetch("/", {
                 method: "PUT",
-                body: {id: activeRecordId, model, manufacturer, memory, processor, price, quantity}
+                body: JSON.stringify({id: activeRecordId, model, manufacturer, memoryAmount: memory, processor, price, quantity})
             }).then(() => console.log({id: activeRecordId, model, manufacturer, memory, processor, price, quantity}));
         }
         else {
-            fetch("/", {
+            fetch("http://localhost:8080/consoles", {
                 method: "POST",
-                body: {model, manufacturer, memory, processor, price, quantity}
-            }).then(() => console.log({model, manufacturer, memory, processor, price, quantity}));
+                body: JSON.stringify({model, manufacturer, memoryAmount: memory, processor, price, quantity}),
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                console.log(response);
+                if(response.ok) {
+                    response.json().then(resData => setData([...data, resData]))
+                }
+                else {
+                    alert("Error while creating record!");
+                }
+            });
         }
     }
 
@@ -72,12 +90,12 @@ function ConsoleTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.tableData.map(row =>
+                {data.map(row =>
                     <tr key={row.id} className={getRecordClass(row)} onClick={() => onRecordClick(row)}>
                         <td>{row.id}</td>
                         <td>{row.model}</td>
                         <td>{row.manufacturer}</td>
-                        <td>{row.memory}</td>
+                        <td>{row.memoryAmount}</td>
                         <td>{row.processor}</td>
                         <td>{row.price}</td>
                         <td>{row.quantity}</td>
