@@ -93,6 +93,23 @@ function TShirtTable(props) {
         }
     }
 
+    function onDeleteButtonClicked(e, row) {
+        e.stopPropagation(); // Don't let event propagate to record for selection/activation
+        fetch("http://localhost:8080/tshirts/" + row.id, {
+            method: "DELETE"
+        })
+        .then(response => {
+            if(response.ok) {
+                const newData = [...data].filter((value) => value.id !== row.id); // filter out the record that is being deleted
+                setData(newData);
+                setActiveRecordId(0); // Don't forget to deselect the record
+            }
+            else {
+                alert("Error while deleting record!");
+            }
+        })
+    }
+
     return <div>
         <h2>T-Shirts</h2>
         <table>
@@ -115,6 +132,7 @@ function TShirtTable(props) {
                         <td>{row.description}</td>
                         <td>{row.price}</td>
                         <td>{row.quantity}</td>
+                        <td><button onClick={(e) => onDeleteButtonClicked(e, row)}>Delete</button></td>
                     </tr>)}
             </tbody>
         </table>
