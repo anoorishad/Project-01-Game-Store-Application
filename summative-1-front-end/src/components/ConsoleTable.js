@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import './Table.css';
 
 function ConsoleTable(props) {
+    const [idFilter, setIdFilter] = useState("");
+    const [manufacturerFilter, setManufacturerFilter] = useState("");
+
     const [data, setData] = useState([]);
 
     const [model, setModel] = useState("");
@@ -97,8 +100,48 @@ function ConsoleTable(props) {
         }
     }
 
+    function onFilterConsolesById(e) {
+        e.preventDefault();
+        if(!idFilter) {
+            return;
+        }
+        fetch("http://localhost:8080/consoles/" + idFilter)
+        .then(response => response.json()
+        .then(data => setData([data]))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
+    function onFilterConsolesByManufacturer(e) {
+        e.preventDefault();
+        if(!manufacturerFilter) {
+            return;
+        }
+        fetch("http://localhost:8080/consoles/manufacturer/" + manufacturerFilter)
+        .then(response => response.json()
+        .then(data => setData(data))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
     return <div>
         <h2>Consoles</h2>
+        <form onSubmit={onFilterConsolesById}>
+            <label htmlFor="id-filter-input">Filter by ID</label>
+            <input name="id-filter-input" onChange={(e) => setIdFilter(e.target.value)} value={idFilter}></input>
+            <input type="submit" value="Filter"></input>
+        </form>
+        <form onSubmit={onFilterConsolesByManufacturer}>
+            <label htmlFor="title-filter-input">Filter by Title</label>
+            <input name="title-filter-input" onChange={(e) => setManufacturerFilter(e.target.value)} value={manufacturerFilter}></input>
+            <input type="submit" value="Filter"></input>
+        </form>
         <table>
             <thead>
                 <tr>
