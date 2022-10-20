@@ -9,26 +9,6 @@ import './App.css';
 function App() {
   const [activeTab, setActiveTab] = useState("game");
 
-  const [gameData] = useState([
-    {
-      id: 1,
-      title: "The Bestest Game EVAR!!!",
-      esrbRating: "M",
-      description: "The only game you'll ever need to play. Seriously. Why are you still reading this? Go buy it already!",
-      price: 69.99,
-      studio: "AwesomeSoft Studios",
-      quantity: 2
-    },
-    {
-      id: 2,
-      title: "Mediocre Game",
-      esrbRating: "T",
-      description: "A standard game, with all the positive and negative connotations that apply. Opinion is sharply divided.",
-      price: 29.99,
-      studio: "Some Indie Studio You've Probably Never Heard Of",
-      quantity: 12
-    }
-  ]);
   const [consoleData] = useState([
     {
       id: 1,
@@ -38,16 +18,6 @@ function App() {
       processor: "Cell Processor 3",
       price: 499.99,
       quantity: 5
-    }
-  ]);
-  const [tShirtData] = useState([
-    {
-      id: 1,
-      size: "XL",
-      color: "White",
-      description: "We were too lazy to add dye to this shirt. But it's still a really nice shirt.",
-      price: 6.99,
-      quantity: 50
     }
   ]);
   const [invoiceData] = useState([
@@ -75,13 +45,11 @@ function App() {
   function getVisibleTable() {
     switch(activeTab) {
       case "game":
-        return <>
-            <GameTable tableData={gameData}></GameTable>
-          </>
+        return <GameTable></GameTable>
       case "console":
         return <ConsoleTable tableData={consoleData}></ConsoleTable>
       case "t-shirt":
-        return <TShirtTable tableData={tShirtData}></TShirtTable>
+        return <TShirtTable></TShirtTable>
       case "invoice":
         return <InvoiceTable tableData={invoiceData}></InvoiceTable>
       default:
