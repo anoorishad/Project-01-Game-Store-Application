@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import './Table.css';
 
 function InvoiceTable(props) {
+    const [data, setData] = useState([]);
+
     const [name, setName] = useState("");
     const [street, setStreet] = useState("");
     const [city, setCity] = useState("");
@@ -13,6 +15,12 @@ function InvoiceTable(props) {
     const [quantity, setQuantity] = useState("");
     
     const [activeRecordId, setActiveRecordId] = useState(0);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/invoices")
+        .then((response) => response.json()
+        .then((responseBody) => setData(responseBody)))
+    }, []);
 
     function getRecordClass(row) {
         const classes = ["record"];
@@ -56,10 +64,19 @@ function InvoiceTable(props) {
             }).then(() => console.log({id: activeRecordId, name, street, city, state, zip, itemType, itemId, quantity}));
         }
         else {
-            fetch("/", {
+            fetch("http://localhost:8080/invoices", {
                 method: "POST",
-                body: {name, street, city, state, zip, itemType, itemId, quantity}
-            }).then(() => console.log({name, street, city, state, zip, itemType, itemId, quantity}));
+                body: JSON.stringify({name, street, city, state, zipcode: zip, itemType, itemId, quantity}),
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if(response.ok) {
+                    response.json().then(resData => setData([...data, resData]))
+                }
+                else {
+                    alert("Error while creating record!");
+                }
+            });
         }
     }
 
@@ -80,14 +97,14 @@ function InvoiceTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.tableData.map(row =>
+                {data.map(row =>
                     <tr key={row.id} className={getRecordClass(row)} onClick={() => onRecordClick(row)}>
                         <td>{row.id}</td>
                         <td>{row.name}</td>
                         <td>{row.street}</td>
                         <td>{row.city}</td>
                         <td>{row.state}</td>
-                        <td>{row.zip}</td>
+                        <td>{row.zipcode}</td>
                         <td>{row.itemType}</td>
                         <td>{row.itemId}</td>
                         <td>{row.quantity}</td>
