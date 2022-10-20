@@ -49,11 +49,32 @@ function TShirtTable(props) {
     function onFormSubmit(e) {
         e.preventDefault(); // Don't forget this since we're not using the default form behavior
         if(activeRecordId) {
-            fetch("/", {
+            fetch("http://localhost:8080/tshirts", {
                 method: "PUT",
                 body: JSON.stringify({id: activeRecordId, size, color, description, price, quantity}),
                 headers: {'Content-Type': 'application/json'}
-            }).then(() => console.log({id: activeRecordId, size, color, description, price, quantity}));
+            })
+            .then((response) => {
+                if(response.ok) {
+                    fetch("http://localhost:8080/tshirts/" + activeRecordId)
+                    .then(response => {
+                        if(response.ok) {
+                            response.json().then(resData => {
+                                const newData = [...data].filter((value) => value.id !== resData.id); // filter out the old record that is being updated...
+                                newData.push(resData); // ...and put the new version of it in
+                                newData.sort((a, b) => a.id - b.id); // Sort by ID
+                                setData(newData);
+                            });
+                        }
+                        else {
+                            alert("Error while getting record!");
+                        }
+                    });
+                }
+                else {
+                    alert("Error while updating record!");
+                }
+            });
         }
         else {
             fetch("http://localhost:8080/tshirts", {

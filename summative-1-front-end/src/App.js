@@ -45,9 +45,7 @@ function App() {
   function getVisibleTable() {
     switch(activeTab) {
       case "game":
-        return <>
-            <GameTable></GameTable>
-          </>
+        return <GameTable></GameTable>
       case "console":
         return <ConsoleTable tableData={consoleData}></ConsoleTable>
       case "t-shirt":
