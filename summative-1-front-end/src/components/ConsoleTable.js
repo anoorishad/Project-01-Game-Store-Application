@@ -100,6 +100,23 @@ function ConsoleTable(props) {
         }
     }
 
+    function onDeleteButtonClicked(e, row) {
+        e.stopPropagation(); // Don't let event propagate to record for selection/activation
+        fetch("http://localhost:8080/consoles/" + row.id, {
+            method: "DELETE"
+        })
+        .then(response => {
+            if(response.ok) {
+                const newData = [...data].filter((value) => value.id !== row.id); // filter out the record that is being deleted
+                setData(newData);
+                setActiveRecordId(0); // Don't forget to deselect the record
+            }
+            else {
+                alert("Error while deleting record!");
+            }
+        })
+    }
+
     function onFilterConsolesById(e) {
         e.preventDefault();
         if(!idFilter) {
@@ -130,6 +147,13 @@ function ConsoleTable(props) {
         setActiveRecordId(0); // Don't forget to deselect the record
     }
 
+    function onClearConsoleFilters() {
+        fetch("http://localhost:8080/consoles")
+        .then((response) => response.json()
+        .then((responseBody) => setData(responseBody)))
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
     return <div>
         <h2>Consoles</h2>
         <form onSubmit={onFilterConsolesById}>
@@ -138,10 +162,11 @@ function ConsoleTable(props) {
             <input type="submit" value="Filter"></input>
         </form>
         <form onSubmit={onFilterConsolesByManufacturer}>
-            <label htmlFor="title-filter-input">Filter by Title</label>
+            <label htmlFor="title-filter-input">Filter by Manufacturer</label>
             <input name="title-filter-input" onChange={(e) => setManufacturerFilter(e.target.value)} value={manufacturerFilter}></input>
             <input type="submit" value="Filter"></input>
         </form>
+        <button onClick={onClearConsoleFilters}>Show All</button>
         <table>
             <thead>
                 <tr>
@@ -164,6 +189,7 @@ function ConsoleTable(props) {
                         <td>{row.processor}</td>
                         <td>{row.price}</td>
                         <td>{row.quantity}</td>
+                        <td><button onClick={(e) => onDeleteButtonClicked(e, row)}>Delete</button></td>
                     </tr>)}
             </tbody>
         </table>

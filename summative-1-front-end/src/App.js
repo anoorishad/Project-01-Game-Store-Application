@@ -9,17 +9,6 @@ import './App.css';
 function App() {
   const [activeTab, setActiveTab] = useState("game");
 
-  const [consoleData] = useState([
-    {
-      id: 1,
-      model: "PreyStation",
-      manufacturer: "Sonny",
-      memory: "8 GB",
-      processor: "Cell Processor 3",
-      price: 499.99,
-      quantity: 5
-    }
-  ]);
   const [invoiceData] = useState([
     {
       id: 1,
@@ -47,7 +36,7 @@ function App() {
       case "game":
         return <GameTable></GameTable>
       case "console":
-        return <ConsoleTable tableData={consoleData}></ConsoleTable>
+        return <ConsoleTable></ConsoleTable>
       case "t-shirt":
         return <TShirtTable></TShirtTable>
       case "invoice":
