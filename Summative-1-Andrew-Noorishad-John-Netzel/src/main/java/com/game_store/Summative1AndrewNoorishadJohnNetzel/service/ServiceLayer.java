@@ -105,28 +105,31 @@ public class ServiceLayer {
 
     private void updateInStockQuantity(Invoice invoice) {
         switch(invoice.getItemType()) {
-            case "Game":
+            case "Games":
                 Optional<Game> game = gameRepository.findById(invoice.getItemId());
                 if(game.isPresent()) {
                     Game actualGame = game.get();
                     actualGame.setQuantity(actualGame.getQuantity() - invoice.getQuantity());
                     gameRepository.save(actualGame);
+                    return;
                 }
                 throw new RuntimeException("Game with ID of " + invoice.getItemId() + " not found!");
-            case "Console":
+            case "Consoles":
                 Optional<Console> console = consoleRepository.findById(invoice.getItemId());
                 if(console.isPresent()) {
                     Console actualConsole = console.get();
                     actualConsole.setQuantity(actualConsole.getQuantity() - invoice.getQuantity());
                     consoleRepository.save(actualConsole);
+                    return;
                 }
                 throw new RuntimeException("Console with ID of " + invoice.getItemId() + " not found!");
-            case "T-Shirt":
+            case "T-shirts":
                 Optional<TShirt> tShirt = tShirtRepository.findById(invoice.getItemId());
                 if(tShirt.isPresent()) {
                     TShirt actualTShirt = tShirt.get();
                     actualTShirt.setQuantity(actualTShirt.getQuantity() - invoice.getQuantity());
                     tShirtRepository.save(actualTShirt);
+                    return;
                 }
                 throw new RuntimeException("T-Shirt with ID of " + invoice.getItemId() + " not found!");
             default:
