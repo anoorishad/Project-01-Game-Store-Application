@@ -4,6 +4,9 @@ import './Table.css';
 
 function GameTable(props) {
     const [idFilter, setIdFilter] = useState("");
+    const [titleFilter, setTitleFilter] = useState("");
+    const [studioFilter, setStudioFilter] = useState("");
+    const [esrbRatingFilter, setEsrbRatingFilter] = useState("");
 
     const [data, setData] = useState([]);
     const [title, setTitle] = useState("");
@@ -126,11 +129,62 @@ function GameTable(props) {
         setActiveRecordId(0); // Don't forget to deselect the record
     }
 
+    function onFilterGamesByTitle(e) {
+        e.preventDefault();
+        fetch("http://localhost:8080/games/title/" + titleFilter)
+        .then(response => response.json()
+        .then(data => setData(data))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
+    function onFilterGamesByStudio(e) {
+        e.preventDefault();
+        fetch("http://localhost:8080/games/studio/" + studioFilter)
+        .then(response => response.json()
+        .then(data => setData(data))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
+    function onFilterGamesByEsrbRating(e) {
+        e.preventDefault();
+        fetch("http://localhost:8080/games/esrb/" + esrbRatingFilter)
+        .then(response => response.json()
+        .then(data => setData(data))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
     return <div>
         <h2>Games</h2>
         <form onSubmit={onFilterGamesById}>
             <label htmlFor="id-filter-input">Filter by ID</label>
             <input name="id-filter-input" onChange={(e) => setIdFilter(e.target.value)} value={idFilter}></input>
+            <input type="submit"></input>
+        </form>
+        <form onSubmit={onFilterGamesByTitle}>
+            <label htmlFor="title-filter-input">Filter by Title</label>
+            <input name="title-filter-input" onChange={(e) => setTitleFilter(e.target.value)} value={titleFilter}></input>
+            <input type="submit"></input>
+        </form>
+        <form onSubmit={onFilterGamesByStudio}>
+            <label htmlFor="studio-filter-input">Filter by Studio</label>
+            <input name="studio-filter-input" onChange={(e) => setStudioFilter(e.target.value)} value={studioFilter}></input>
+            <input type="submit"></input>
+        </form>
+        <form onSubmit={onFilterGamesByEsrbRating}>
+            <label htmlFor="esrb-rating-filter-input">Filter by ESRB Rating</label>
+            <input name="esrb-rating-filter-input" onChange={(e) => setEsrbRatingFilter(e.target.value)} value={esrbRatingFilter}></input>
             <input type="submit"></input>
         </form>
         <table>
