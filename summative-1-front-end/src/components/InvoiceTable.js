@@ -68,6 +68,12 @@ function InvoiceTable(props) {
         }));
     }
 
+    function onClearInvoiceFilters() {
+        fetch("http://localhost:8080/invoices")
+        .then((response) => response.json()
+        .then((responseBody) => setData(responseBody)))
+    }
+
     return <div>
         <h2>Invoices</h2>
         <form onSubmit={onFilterInvoicesById}>
@@ -80,6 +86,7 @@ function InvoiceTable(props) {
             <input name="title-filter-input" onChange={(e) => setNameFilter(e.target.value)} value={nameFilter}></input>
             <input type="submit" value="Filter"></input>
         </form>
+        <button onClick={onClearInvoiceFilters}>Show All</button>
         <table>
             <thead>
                 <tr>
