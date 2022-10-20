@@ -54,8 +54,8 @@ public class GameController {
     }
 
     @GetMapping("/esrb/{esrb}")
-    public List<Game> getGameByEsrbRating(@PathVariable String esrbRating) {
-        return repo.findByEsrbRating(esrbRating);
+    public List<Game> getGameByEsrbRating(@PathVariable String esrb) {
+        return repo.findByEsrbRating(esrb);
     }
 
     @GetMapping("/title/{title}")
