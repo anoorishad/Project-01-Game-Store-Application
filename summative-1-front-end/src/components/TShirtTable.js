@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import './Table.css';
 
 function TShirtTable(props) {
+    const [data, setData] = useState([]);
+
     const [size, setSize] = useState("");
     const [color, setColor] = useState("");
     const [description, setDescription] = useState("");
@@ -10,6 +12,12 @@ function TShirtTable(props) {
     const [quantity, setQuantity] = useState("");
     
     const [activeRecordId, setActiveRecordId] = useState(0);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/tshirts")
+        .then((response) => response.json()
+        .then((responseBody) => setData(responseBody)))
+    }, []);
 
     function getRecordClass(row) {
         const classes = ["record"];
@@ -43,14 +51,24 @@ function TShirtTable(props) {
         if(activeRecordId) {
             fetch("/", {
                 method: "PUT",
-                body: {id: activeRecordId, size, color, description, price, quantity}
+                body: JSON.stringify({id: activeRecordId, size, color, description, price, quantity}),
+                headers: {'Content-Type': 'application/json'}
             }).then(() => console.log({id: activeRecordId, size, color, description, price, quantity}));
         }
         else {
-            fetch("/", {
+            fetch("http://localhost:8080/tshirts", {
                 method: "POST",
-                body: {size, color, description, price, quantity}
-            }).then(() => console.log({size, color, description, price, quantity}));
+                body: JSON.stringify({size, color, description, price, quantity}),
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if(response.ok) {
+                    response.json().then(resData => setData([...data, resData]))
+                }
+                else {
+                    alert("Error while creating record!");
+                }
+            });
         }
     }
 
@@ -68,7 +86,7 @@ function TShirtTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.tableData.map(row =>
+                {data.map(row =>
                     <tr key={row.id} className={getRecordClass(row)} onClick={() => onRecordClick(row)}>
                         <td>{row.id}</td>
                         <td>{row.size}</td>
