@@ -159,6 +159,13 @@ function TShirtTable(props) {
         setActiveRecordId(0); // Don't forget to deselect the record
     }
 
+    function onClearTShirtFilters() {
+        fetch("http://localhost:8080/tshirts")
+        .then((response) => response.json()
+        .then((responseBody) => setData(responseBody)))
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
     return <div>
         <h2>T-Shirts</h2>
         <form onSubmit={onFilterTShirtsById}>
@@ -176,6 +183,7 @@ function TShirtTable(props) {
             <input name="studio-filter-input" onChange={(e) => setColorFilter(e.target.value)} value={colorFilter}></input>
             <input type="submit" value="Filter"></input>
         </form>
+        <button onClick={onClearTShirtFilters}>Show All</button>
         <table>
             <thead>
                 <tr>
