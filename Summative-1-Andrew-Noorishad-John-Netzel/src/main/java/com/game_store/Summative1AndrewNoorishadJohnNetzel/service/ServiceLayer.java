@@ -48,19 +48,19 @@ public class ServiceLayer {
 
     private BigDecimal getItemPrice(String itemType, Integer itemId) {
         switch(itemType) {
-            case "Game":
+            case "Games":
                 Optional<Game> game = gameRepository.findById(itemId);
                 if(game.isPresent()) {
                     return game.get().getPrice();
                 }
                 throw new RuntimeException("Game with ID of " + itemId + " not found!");
-            case "Console":
+            case "Consoles":
                 Optional<Console> console = consoleRepository.findById(itemId);
                 if(console.isPresent()) {
                     return console.get().getPrice();
                 }
                 throw new RuntimeException("Console with ID of " + itemId + " not found!");
-            case "T-Shirt":
+            case "T-shirts":
                 Optional<TShirt> tShirt = tShirtRepository.findById(itemId);
                 if(tShirt.isPresent()) {
                     return tShirt.get().getPrice();
@@ -86,7 +86,7 @@ public class ServiceLayer {
         String productType = invoice.getItemType();
         Optional<ProcessingFee> processingFeeRecord = processingFeeRepository.findById(productType);
         if(!processingFeeRecord.isPresent()) {
-            throw new RuntimeException("Cannot find processing for state: " + productType);
+            throw new RuntimeException("Cannot find processing for product type: " + productType);
         }
         BigDecimal processingFee = processingFeeRecord.get().getFee();
         // Check for large (>10) orders
