@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import './Table.css';
 
 function GameTable(props) {
+    const [idFilter, setIdFilter] = useState("");
+
     const [data, setData] = useState([]);
     const [title, setTitle] = useState("");
     const [esrbRating, setEsrbRating] = useState("");
@@ -112,8 +114,25 @@ function GameTable(props) {
         })
     }
 
+    function onFilterGamesById(e) {
+        e.preventDefault();
+        fetch("http://localhost:8080/games/" + idFilter)
+        .then(response => response.json()
+        .then(data => setData([data]))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
     return <div>
         <h2>Games</h2>
+        <form onSubmit={onFilterGamesById}>
+            <label htmlFor="id-filter-input">Filter by ID</label>
+            <input name="id-filter-input" onChange={(e) => setIdFilter(e.target.value)} value={idFilter}></input>
+            <input type="submit"></input>
+        </form>
         <table>
             <thead>
                 <tr>
