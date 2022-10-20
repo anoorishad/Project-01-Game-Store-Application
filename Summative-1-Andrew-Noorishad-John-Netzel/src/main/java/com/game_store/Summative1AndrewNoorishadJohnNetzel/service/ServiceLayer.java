@@ -20,8 +20,7 @@ public class ServiceLayer {
     private TShirtRepository tShirtRepository;
 
     @Autowired
-    public ServiceLayer(InvoiceRepository invoiceRepository, TaxRateRepository taxRateRepository, ProcessingFeeRepository processingFeeRepository,
-                        GameRepository gameRepository, ConsoleRepository consoleRepository, TShirtRepository tShirtRepository) {
+    public ServiceLayer(InvoiceRepository invoiceRepository, TaxRateRepository taxRateRepository, ProcessingFeeRepository processingFeeRepository, GameRepository gameRepository, ConsoleRepository consoleRepository, TShirtRepository tShirtRepository) {
         this.invoiceRepository = invoiceRepository;
         this.taxRateRepository = taxRateRepository;
         this.processingFeeRepository = processingFeeRepository;
