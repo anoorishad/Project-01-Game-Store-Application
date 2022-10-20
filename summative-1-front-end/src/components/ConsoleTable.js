@@ -42,7 +42,7 @@ function ConsoleTable(props) {
             setActiveRecordId(row.id);
             setModel(row.model);
             setManufacturer(row.manufacturer);
-            setMemory(row.memory);
+            setMemory(row.memoryAmount);
             setProcessor(row.processor);
             setPrice(row.price);
             setQuantity(row.quantity);
@@ -52,10 +52,32 @@ function ConsoleTable(props) {
     function onFormSubmit(e) {
         e.preventDefault(); // Don't forget this since we're not using the default form behavior
         if(activeRecordId) {
-            fetch("/", {
+            fetch("http://localhost:8080/consoles", {
                 method: "PUT",
-                body: JSON.stringify({id: activeRecordId, model, manufacturer, memoryAmount: memory, processor, price, quantity})
-            }).then(() => console.log({id: activeRecordId, model, manufacturer, memory, processor, price, quantity}));
+                body: JSON.stringify({id: activeRecordId, model, manufacturer, memoryAmount: memory, processor, price, quantity}),
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                if(response.ok) {
+                    fetch("http://localhost:8080/consoles/" + activeRecordId)
+                    .then(response => {
+                        if(response.ok) {
+                            response.json().then(resData => {
+                                const newData = [...data].filter((value) => value.id !== resData.id); // filter out the old record that is being updated...
+                                newData.push(resData); // ...and put the new version of it in
+                                newData.sort((a, b) => a.id - b.id); // Sort by ID
+                                setData(newData);
+                            });
+                        }
+                        else {
+                            alert("Error while getting record!");
+                        }
+                    });
+                }
+                else {
+                    alert("Error while updating record!");
+                }
+            });
         }
         else {
             fetch("http://localhost:8080/consoles", {
