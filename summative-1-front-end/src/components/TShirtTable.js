@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import './Table.css';
 
 function TShirtTable(props) {
+    const [idFilter, setIdFilter] = useState("");
+    const [sizeFilter, setSizeFilter] = useState("");
+    const [colorFilter, setColorFilter] = useState("");
+
     const [data, setData] = useState([]);
 
     const [size, setSize] = useState("");
@@ -110,8 +114,68 @@ function TShirtTable(props) {
         })
     }
 
+    function onFilterTShirtsById(e) {
+        e.preventDefault();
+        if(!idFilter) {
+            return;
+        }
+        fetch("http://localhost:8080/tshirts/" + idFilter)
+        .then(response => response.json()
+        .then(data => setData([data]))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
+    function onFilterTShirtsBySize(e) {
+        e.preventDefault();
+        if(!sizeFilter) {
+            return;
+        }
+        fetch("http://localhost:8080/tshirts/size/" + sizeFilter)
+        .then(response => response.json()
+        .then(data => setData(data))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
+    function onFilterTShirtsByColor(e) {
+        e.preventDefault();
+        if(!colorFilter) {
+            return;
+        }
+        fetch("http://localhost:8080/tshirts/color/" + colorFilter)
+        .then(response => response.json()
+        .then(data => setData(data))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+        setActiveRecordId(0); // Don't forget to deselect the record
+    }
+
     return <div>
         <h2>T-Shirts</h2>
+        <form onSubmit={onFilterTShirtsById}>
+            <label htmlFor="id-filter-input">Filter by ID</label>
+            <input name="id-filter-input" onChange={(e) => setIdFilter(e.target.value)} value={idFilter}></input>
+            <input type="submit" value="Filter"></input>
+        </form>
+        <form onSubmit={onFilterTShirtsBySize}>
+            <label htmlFor="title-filter-input">Filter by Size</label>
+            <input name="title-filter-input" onChange={(e) => setSizeFilter(e.target.value)} value={sizeFilter}></input>
+            <input type="submit" value="Filter"></input>
+        </form>
+        <form onSubmit={onFilterTShirtsByColor}>
+            <label htmlFor="studio-filter-input">Filter by Color</label>
+            <input name="studio-filter-input" onChange={(e) => setColorFilter(e.target.value)} value={colorFilter}></input>
+            <input type="submit" value="Filter"></input>
+        </form>
         <table>
             <thead>
                 <tr>
