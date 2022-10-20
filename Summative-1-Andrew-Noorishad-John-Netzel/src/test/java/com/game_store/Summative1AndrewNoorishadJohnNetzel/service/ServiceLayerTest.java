@@ -3,6 +3,7 @@ package com.game_store.Summative1AndrewNoorishadJohnNetzel.service;
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.*;
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.*;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -166,15 +167,44 @@ public class ServiceLayerTest {
         invoice.setTotal(BigDecimal.valueOf(226.97));
 
         Invoice invoice2 = new Invoice();
-        invoice2.setName("Andrew");
-        invoice2.setStreet("123 Street");
-        invoice2.setCity("Seattle");
-        invoice2.setState("WA");
-        invoice2.setZipcode("12345");
-        invoice2.setItemType("Console");
+        invoice.setName("Andrew");
+        invoice.setStreet("123 Street");
+        invoice.setCity("Seattle");
+        invoice.setState("WA");
+        invoice.setZipcode("12345");
+        invoice.setItemType("Console");
         invoice.setItemId(1);
-        invoice2.setQuantity(5);
+        invoice.setUnitPrice(BigDecimal.valueOf(199.99));
+        invoice.setQuantity(5);
+        invoice.setSubtotal(BigDecimal.valueOf(199.99));
+        invoice.setTax(BigDecimal.valueOf(11.99));
+        invoice.setProcessingFee(BigDecimal.valueOf(14.99));
+        invoice.setTotal(BigDecimal.valueOf(226.97));
 
         doReturn(invoice).when(invoiceRepository).save(invoice2);
+    }
+    @Test
+    public void shouldGetConsolePrice() {
+        BigDecimal expectedResult = BigDecimal.valueOf(199.99);
+
+        BigDecimal actualResult = consoleRepository.findById(1).get().getPrice();
+
+        assertEquals(expectedResult,actualResult);
+    }
+    @Test
+    public void shouldGetGamePrice() {
+        BigDecimal expectedResult = BigDecimal.valueOf(49.99);
+
+        BigDecimal actualResult = gameRepository.findById(1).get().getPrice();
+
+        assertEquals(expectedResult,actualResult);
+    }
+    @Test
+    public void shouldGetTShirtPrice() {
+        BigDecimal expectedResult = BigDecimal.valueOf(9.99);
+
+        BigDecimal actualResult = tShirtRepository.findById(1).get().getPrice();
+
+        assertEquals(expectedResult,actualResult);
     }
 }

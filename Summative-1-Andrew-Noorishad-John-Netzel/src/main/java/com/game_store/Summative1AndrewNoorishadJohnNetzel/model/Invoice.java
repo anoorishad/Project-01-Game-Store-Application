@@ -43,7 +43,7 @@ public class Invoice {
     @Column(name = "item_id")
     private Integer itemId;
 
-    //@NotNull // Can be null when coming in from front end
+    @NotNull
     @PositiveOrZero
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
@@ -52,20 +52,20 @@ public class Invoice {
     @PositiveOrZero
     private Integer quantity;
 
-    //@NotNull // Can be null when coming in from front end
+    @NotNull
     @PositiveOrZero
     private BigDecimal subtotal;
 
-    //@NotNull // Can be null when coming in from front end
+    @NotNull
     @PositiveOrZero
     private BigDecimal tax;
 
-    //@NotNull // Can be null when coming in from front end
+    @NotNull
     @PositiveOrZero
     @Column(name = "processing_fee")
     private BigDecimal processingFee;
 
-    //@NotNull // Can be null when coming in from front end
+    @NotNull
     @PositiveOrZero
     private BigDecimal total;
 
