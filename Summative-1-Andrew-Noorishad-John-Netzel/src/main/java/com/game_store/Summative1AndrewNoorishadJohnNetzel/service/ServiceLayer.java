@@ -42,6 +42,7 @@ public class ServiceLayer {
 
     private void calculateSubtotal(Invoice invoice) {
         BigDecimal subtotal = getItemPrice(invoice.getItemType(), invoice.getItemId());
+        invoice.setUnitPrice(subtotal);
         subtotal = subtotal.multiply(BigDecimal.valueOf(invoice.getQuantity()));
         invoice.setSubtotal(subtotal);
     }
