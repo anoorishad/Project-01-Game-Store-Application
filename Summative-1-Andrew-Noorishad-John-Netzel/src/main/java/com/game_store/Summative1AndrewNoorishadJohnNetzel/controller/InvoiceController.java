@@ -20,7 +20,7 @@ public class InvoiceController {
     InvoiceRepository repo;
 
     @Autowired
-    private ServiceLayer serviceLayer;
+    ServiceLayer serviceLayer;
 
     @GetMapping()
     public List<Invoice> getInvoices() {return repo.findAll();}
