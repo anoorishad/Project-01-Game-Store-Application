@@ -165,4 +165,20 @@ public class GameControllerTest {
         mockMvc.perform(delete("/games/1"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    public void shouldReturn422StatusCodeIfRequestIsInvalid() throws Exception {
+
+        mockMvc.perform(get("/games/test"))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+
+
+        mockMvc.perform(get("/games/four"))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+
+    }
 }

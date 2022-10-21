@@ -32,6 +32,7 @@ public class ServiceLayer {
 
     public Invoice addInvoice(@Valid Invoice invoice){
         setFinalInvoice(invoice);
+        System.out.println(invoice.getSubtotal());
         return invoiceRepository.save(invoice);
     }
 

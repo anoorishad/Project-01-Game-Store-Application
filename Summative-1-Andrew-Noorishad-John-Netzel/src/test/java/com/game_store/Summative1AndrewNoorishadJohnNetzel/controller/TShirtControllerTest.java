@@ -151,4 +151,20 @@ public class TShirtControllerTest {
         mockMvc.perform(delete("/tshirts/1"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    public void shouldReturn422StatusCodeIfRequestIsInvalid() throws Exception {
+
+        mockMvc.perform(get("/tshirts/test"))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+
+
+        mockMvc.perform(get("/tshirts/four"))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+
+    }
 }
