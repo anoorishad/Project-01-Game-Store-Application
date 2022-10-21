@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -20,8 +21,7 @@ public class ServiceLayer {
     private TShirtRepository tShirtRepository;
 
     @Autowired
-    public ServiceLayer(InvoiceRepository invoiceRepository, TaxRateRepository taxRateRepository, ProcessingFeeRepository processingFeeRepository,
-                        GameRepository gameRepository, ConsoleRepository consoleRepository, TShirtRepository tShirtRepository) {
+    public ServiceLayer(InvoiceRepository invoiceRepository, TaxRateRepository taxRateRepository, ProcessingFeeRepository processingFeeRepository, GameRepository gameRepository, ConsoleRepository consoleRepository, TShirtRepository tShirtRepository) {
         this.invoiceRepository = invoiceRepository;
         this.taxRateRepository = taxRateRepository;
         this.processingFeeRepository = processingFeeRepository;
@@ -30,20 +30,24 @@ public class ServiceLayer {
         this.tShirtRepository = tShirtRepository;
     }
 
-    public Invoice addInvoice(Invoice invoice) {
+    public Invoice addInvoice(@Valid Invoice invoice){
+        setFinalInvoice(invoice);
+        return invoiceRepository.save(invoice);
+    }
+
+    private void setFinalInvoice(Invoice invoice) {
         calculateSubtotal(invoice);
         calculateSalesTax(invoice);
         calculateProcessingFee(invoice);
         calculateTotal(invoice);
         updateInStockQuantity(invoice);
 
-        return invoiceRepository.save(invoice);
     }
 
     private void calculateSubtotal(Invoice invoice) {
-        BigDecimal subtotal = getItemPrice(invoice.getItemType(), invoice.getItemId());
-        invoice.setUnitPrice(subtotal);
-        subtotal = subtotal.multiply(BigDecimal.valueOf(invoice.getQuantity()));
+        BigDecimal itemPrice = getItemPrice(invoice.getItemType(), invoice.getItemId());
+        invoice.setUnitPrice(itemPrice);
+        BigDecimal subtotal = itemPrice.multiply(BigDecimal.valueOf(invoice.getQuantity()));
         invoice.setSubtotal(subtotal);
     }
 

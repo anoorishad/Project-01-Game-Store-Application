@@ -37,7 +37,7 @@ public class InvoiceController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Invoice addInvoice(@RequestBody @Valid Invoice invoice) {
+    public Invoice addInvoice(@RequestBody Invoice invoice) {
         return serviceLayer.addInvoice(invoice);
     }
 
