@@ -2,6 +2,7 @@ openapi: 3.0.1
 info:
   title: Summative-1 Game Store OpenAPI definition
   version: v1
+  description: "This API maintains an inventory of product for a game store. Typical create, read, update, and delete endpoints are provided for each product categoy (games, t-shirts, and consoles). Create and read endpoints are provided for product invoices. Additional GET endopints are provided for filtering of products by relevant fields."
 servers:
   - url: http://localhost:8080/
     description: Local server url
@@ -11,6 +12,7 @@ paths:
       tags:
         - t-shirt-controller
       operationId: getTShirts
+      description: "Get all t-shirts"
       responses:
         '200':
           description: OK
@@ -30,6 +32,7 @@ paths:
       tags:
         - t-shirt-controller
       operationId: updateTShirt
+      description: "Update a t-shirt"
       requestBody:
         content:
           application/json:
@@ -49,6 +52,7 @@ paths:
       tags:
         - t-shirt-controller
       operationId: addTShirt
+      description: "Add a t-shirt"
       requestBody:
         content:
           application/json:
@@ -73,6 +77,7 @@ paths:
       tags:
         - game-controller
       operationId: getGames
+      description: "Get all games"
       responses:
         '200':
           description: OK
@@ -92,6 +97,7 @@ paths:
       tags:
         - game-controller
       operationId: updateGame
+      description: "Update a game"
       requestBody:
         content:
           application/json:
@@ -111,6 +117,7 @@ paths:
       tags:
         - game-controller
       operationId: addGame
+      description: "Create a game"
       requestBody:
         content:
           application/json:
@@ -135,6 +142,7 @@ paths:
       tags:
         - console-controller
       operationId: getConsoles
+      description: "Get all consoles"
       responses:
         '200':
           description: OK
@@ -154,6 +162,7 @@ paths:
       tags:
         - console-controller
       operationId: updateConsole
+      description: "Update a console"
       requestBody:
         content:
           application/json:
@@ -173,6 +182,7 @@ paths:
       tags:
         - console-controller
       operationId: addConsole
+      description: "Create a console"
       requestBody:
         content:
           application/json:
@@ -197,6 +207,7 @@ paths:
       tags:
         - invoice-controller
       operationId: getInvoices
+      description: "Get all invoices"
       responses:
         '200':
           description: OK
@@ -216,6 +227,7 @@ paths:
       tags:
         - invoice-controller
       operationId: addInvoice
+      description: "Create an invoice"
       requestBody:
         content:
           application/json:
@@ -240,6 +252,7 @@ paths:
       tags:
         - t-shirt-controller
       operationId: getTShirtById
+      description: "Get t-shirt by ID"
       parameters:
         - name: id
           in: path
@@ -285,6 +298,7 @@ paths:
       tags:
         - t-shirt-controller
       operationId: getTShirtBySize
+      description: "Get all t-shirts by size"
       parameters:
         - name: size
           in: path
@@ -311,6 +325,7 @@ paths:
       tags:
         - t-shirt-controller
       operationId: getTShirtByColor
+      description: "Get all t-shirts by color"
       parameters:
         - name: color
           in: path
@@ -337,6 +352,7 @@ paths:
       tags:
         - data-loader-controller
       operationId: loadData
+      description: "Seeds database with data for testing purposes"
       responses:
         '200':
           description: OK
@@ -351,6 +367,7 @@ paths:
       tags:
         - invoice-controller
       operationId: getInvoiceById
+      description: "Get an invoice by ID"
       parameters:
         - name: id
           in: path
@@ -376,6 +393,7 @@ paths:
       tags:
         - invoice-controller
       operationId: getInvoiceByCustomerName
+      description: "Get an invoice by customer name"
       parameters:
         - name: name
           in: path
@@ -402,6 +420,7 @@ paths:
       tags:
         - game-controller
       operationId: getGameById
+      description: "Get a game by ID"
       parameters:
         - name: id
           in: path
@@ -447,6 +466,7 @@ paths:
       tags:
         - game-controller
       operationId: getGameByTitle
+      description: "Get all games by title"
       parameters:
         - name: title
           in: path
@@ -473,6 +493,7 @@ paths:
       tags:
         - game-controller
       operationId: getGameByStudio
+      description: "Get all games by studio name"
       parameters:
         - name: studio
           in: path
@@ -499,6 +520,7 @@ paths:
       tags:
         - game-controller
       operationId: getGameByEsrbRating
+      description: "Get all games by ESRB rating"
       parameters:
         - name: esrb
           in: path
@@ -525,6 +547,7 @@ paths:
       tags:
         - console-controller
       operationId: getConsoleById
+      description: "Get a console by ID"
       parameters:
         - name: id
           in: path
@@ -570,6 +593,7 @@ paths:
       tags:
         - console-controller
       operationId: getConsoleByManufacturer
+      description: "Get all consoles by manufacturer"
       parameters:
         - name: manufacturer
           in: path
