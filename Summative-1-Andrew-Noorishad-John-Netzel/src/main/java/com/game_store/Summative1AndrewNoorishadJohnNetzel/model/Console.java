@@ -2,8 +2,11 @@ package com.game_store.Summative1AndrewNoorishadJohnNetzel.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.core.MethodParameter;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -20,20 +23,20 @@ public class Console {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty
+    @NotEmpty(message = "Model cannot be null")
     private String model;
-    @NotEmpty
+    @NotEmpty(message = "Manufacturer cannot be null")
     private String manufacturer;
-    @NotEmpty
+    @NotEmpty(message = "Memory Amount cannot be null")
     @Column(name = "memory_amount")
     private String memoryAmount;
-    @NotEmpty
+    @NotEmpty(message = "Processor cannot be null")
     private String processor;
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Price cannot be null")
+    @PositiveOrZero(message = "Price must be positive or zero")
     private BigDecimal price;
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Quantity cannot be null")
+    @PositiveOrZero(message = "Quantity must be positive or zero")
     private Integer quantity;
 
     public Console(){};
@@ -99,7 +102,10 @@ public class Console {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Integer quantity)  {
+        if(quantity < 0){
+            throw new RuntimeException("Invalid Quantity");
+        }
         this.quantity = quantity;
     }
 

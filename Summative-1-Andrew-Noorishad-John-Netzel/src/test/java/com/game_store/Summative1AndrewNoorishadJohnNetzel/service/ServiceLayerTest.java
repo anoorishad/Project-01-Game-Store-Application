@@ -2,9 +2,14 @@ package com.game_store.Summative1AndrewNoorishadJohnNetzel.service;
 
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.model.*;
 import com.game_store.Summative1AndrewNoorishadJohnNetzel.repository.*;
+
+
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionSystemException;
 
+
+import javax.persistence.RollbackException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +54,7 @@ public class ServiceLayerTest {
         console.setMemoryAmount("32GB");
         console.setProcessor("5ghz");
         console.setPrice(BigDecimal.valueOf(199.99));
-        console.setQuantity(10);
+        console.setQuantity(20);
 
         Console console2 = new Console();
         console2.setModel("Xbox Series X");
@@ -249,6 +254,29 @@ public class ServiceLayerTest {
     }
 
     @Test
+    public void shouldAddAdditionalProcessingFeeIfQuantityIsGreaterThan10ForCalculateProcessingFee() {
+        invoice.setQuantity(11);
+        BigDecimal expectedResult = BigDecimal.valueOf(30.48);
+
+        Optional<ProcessingFee> processingFeeRecord = processingFeeRepository.findById(invoice.getItemType());
+
+        if(!processingFeeRecord.isPresent()) {
+            throw new RuntimeException("Cannot find processing for product type: " + invoice.getItemType());
+        }
+        BigDecimal processingFee = processingFeeRecord.get().getFee();
+        // Check for large (>10) orders
+        if(invoice.getQuantity() > 10) {
+            processingFee = processingFee.add(BigDecimal.valueOf(15.49));
+        }
+        invoice.setProcessingFee(processingFee); // Load value into invoice
+
+        BigDecimal actualResult = invoice.getProcessingFee();
+
+
+        assertEquals(expectedResult,actualResult);
+    }
+
+    @Test
     public void shouldCalculateSubTotal() {
         BigDecimal expectedResult = BigDecimal.valueOf(999.95);
 
@@ -279,7 +307,7 @@ public class ServiceLayerTest {
 
     @Test
     public void shouldUpdateInStockQuantity() {
-        Integer expectedResult = 5;
+        Integer expectedResult = 15;
 
         switch(invoice.getItemType()) {
             case "Games":
@@ -316,5 +344,104 @@ public class ServiceLayerTest {
         Integer actualResult = optionalResult.get().getQuantity();
 
         assertEquals(expectedResult,actualResult);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionWithInvalidStateForCalculateSalesTax() {
+        invoice.setState("OT");
+
+        Optional<SalesTaxRate> taxRateRecord = taxRateRepository.findById(invoice.getState());
+        if(!taxRateRecord.isPresent()) { // If no sales tax record is found...
+            throw new RuntimeException("Cannot find sales tax rate for state: " + invoice.getState());
+        }
+    }
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionWithInvalidProductTypeForCalculateProcessingFee() {
+        invoice.setItemType("Test");
+
+        Optional<ProcessingFee> processingFeeRecord = processingFeeRepository.findById(invoice.getItemType());
+
+        if(!processingFeeRecord.isPresent()) {
+            throw new RuntimeException("Cannot find processing for product type: " + invoice.getItemType());
+        }
+        BigDecimal processingFee = processingFeeRecord.get().getFee();
+        // Check for large (>10) orders
+        if(invoice.getQuantity() > 10) {
+            processingFee = processingFee.add(BigDecimal.valueOf(15.49));
+        }
+        invoice.setProcessingFee(processingFee); // Load value into invoice
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionWithInvalidItemTypeForUpdateInStockQuantity() {
+        invoice.setItemType("Test");
+
+        switch(invoice.getItemType()) {
+            case "Games":
+                Optional<Game> game = gameRepository.findById(invoice.getItemId());
+                if(game.isPresent()) {
+                    Game actualGame = game.get();
+                    actualGame.setQuantity(actualGame.getQuantity() - invoice.getQuantity());
+                    gameRepository.save(actualGame);
+                    return;
+                }
+                throw new RuntimeException("Game with ID of " + invoice.getItemId() + " not found!");
+            case "Consoles":
+                Optional<Console> console = consoleRepository.findById(invoice.getItemId());
+                if(console.isPresent()) {
+                    Console actualConsole = console.get();
+                    actualConsole.setQuantity(actualConsole.getQuantity() - invoice.getQuantity());
+                    consoleRepository.save(actualConsole);
+                    return;
+                }
+                throw new RuntimeException("Console with ID of " + invoice.getItemId() + " not found!");
+            case "T-shirts":
+                Optional<TShirt> tShirt = tShirtRepository.findById(invoice.getItemId());
+                if(tShirt.isPresent()) {
+                    TShirt actualTShirt = tShirt.get();
+                    actualTShirt.setQuantity(actualTShirt.getQuantity() - invoice.getQuantity());
+                    tShirtRepository.save(actualTShirt);
+                    return;
+                }
+                throw new RuntimeException("T-Shirt with ID of " + invoice.getItemId() + " not found!");
+            default:
+                throw new IllegalArgumentException("Invalid itemType: " + invoice.getItemType());
+        }
+    }
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionWithQuantityLargerThanAvailableForUpdateInStockQuantity() {
+        invoice.setQuantity(100);
+
+        switch(invoice.getItemType()) {
+            case "Games":
+                Optional<Game> game = gameRepository.findById(invoice.getItemId());
+                if(game.isPresent()) {
+                    Game actualGame = game.get();
+                    actualGame.setQuantity(actualGame.getQuantity() - invoice.getQuantity());
+                    gameRepository.save(actualGame);
+                    return;
+                }
+                throw new RuntimeException("Game with ID of " + invoice.getItemId() + " not found!");
+            case "Consoles":
+                Optional<Console> console = consoleRepository.findById(invoice.getItemId());
+                if(console.isPresent()) {
+                    Console actualConsole = console.get();
+                    actualConsole.setQuantity(actualConsole.getQuantity() - invoice.getQuantity());
+                    consoleRepository.save(actualConsole);
+                    return;
+                }
+                throw new RuntimeException("Console with ID of " + invoice.getItemId() + " not found!");
+            case "T-shirts":
+                Optional<TShirt> tShirt = tShirtRepository.findById(invoice.getItemId());
+                if(tShirt.isPresent()) {
+                    TShirt actualTShirt = tShirt.get();
+                    actualTShirt.setQuantity(actualTShirt.getQuantity() - invoice.getQuantity());
+                    tShirtRepository.save(actualTShirt);
+                    return;
+                }
+                throw new RuntimeException("T-Shirt with ID of " + invoice.getItemId() + " not found!");
+            default:
+                throw new IllegalArgumentException("Invalid itemType: " + invoice.getItemType());
+        }
     }
 }

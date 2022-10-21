@@ -20,21 +20,21 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty
+    @NotEmpty(message = "Title cannot be null")
     @Column(unique=true)
     private String title;
-    @NotEmpty
+    @NotEmpty(message = "EsrbRating cannot be null")
     @Column(name = "esrb_rating")
     private String esrbRating;
-    @NotEmpty
+    @NotEmpty(message = "Description cannot be null")
     private String description;
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Price cannot be null")
+    @PositiveOrZero(message = "Price must be positive or zero")
     private BigDecimal price;
-    @NotEmpty
+    @NotEmpty(message = "Studio cannot be null")
     private String studio;
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Quantity cannot be null")
+    @PositiveOrZero(message = "Quantity must be positive or zero")
     private Integer quantity;
 
     public Game() {

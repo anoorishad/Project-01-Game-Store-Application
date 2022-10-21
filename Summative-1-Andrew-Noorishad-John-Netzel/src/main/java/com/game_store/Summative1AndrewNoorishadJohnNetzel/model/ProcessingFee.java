@@ -13,7 +13,7 @@ import java.util.Objects;
 public class ProcessingFee {
 
     @Id
-    @NotEmpty
+    @NotEmpty(message = "ProductType cannot be null")
     @Column(name = "product_type", unique = true)
     private String productType;
 

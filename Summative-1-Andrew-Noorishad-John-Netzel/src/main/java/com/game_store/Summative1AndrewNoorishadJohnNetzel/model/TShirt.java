@@ -19,17 +19,17 @@ public class TShirt {
     @Column(name = "t_shirt_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotEmpty
+    @NotEmpty(message = "Size cannot be null")
     private String size;
-    @NotEmpty
+    @NotEmpty(message = "Color cannot be null")
     private String color;
-    @NotEmpty
+    @NotEmpty(message = "Description cannot be null")
     private String description;
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Price cannot be null")
+    @PositiveOrZero(message = "Price must be positive or zero")
     private BigDecimal price;
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Quantity cannot be null")
+    @PositiveOrZero(message = "Quantity must be positive or zero")
     private Integer quantity;
 
     public TShirt() {

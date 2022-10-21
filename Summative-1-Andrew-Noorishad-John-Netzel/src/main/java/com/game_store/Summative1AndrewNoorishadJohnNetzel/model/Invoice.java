@@ -20,53 +20,53 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty
+    @NotEmpty(message = "Name cannot be null")
     private String name;
 
-    @NotEmpty
+    @NotEmpty(message = "Street cannot be null")
     private String street;
 
-    @NotEmpty
+    @NotEmpty(message = "City cannot be null")
     private String city;
 
-    @NotEmpty
+    @NotEmpty(message = "State cannot be null")
     private String state;
 
-    @NotEmpty
+    @NotEmpty(message = "Zipcode cannot be null")
     private String zipcode;
 
     @NotEmpty
     @Column(name = "item_type")
     private String itemType;
 
-    @NotNull
+    @NotNull(message = "ItemId cannot be null")
     @Column(name = "item_id")
     private Integer itemId;
 
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "UnitPrice cannot be null")
+    @PositiveOrZero(message = "UnitPrice must be positive or zero")
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
 
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Quantity cannot be null")
+    @PositiveOrZero(message = "Quantity must be positive or zero")
     private Integer quantity;
 
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Subtotal cannot be null")
+    @PositiveOrZero(message = "Subtotal must be positive or zero")
     private BigDecimal subtotal;
 
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Tax cannot be null")
+    @PositiveOrZero(message = "Tax must be positive or zero")
     private BigDecimal tax;
 
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "ProcessingFee cannot be null")
+    @PositiveOrZero(message = "ProcessingFee must be positive or zero")
     @Column(name = "processing_fee")
     private BigDecimal processingFee;
 
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Total cannot be null")
+    @PositiveOrZero(message = "Total must be positive or zero")
     private BigDecimal total;
 
     public Invoice() {

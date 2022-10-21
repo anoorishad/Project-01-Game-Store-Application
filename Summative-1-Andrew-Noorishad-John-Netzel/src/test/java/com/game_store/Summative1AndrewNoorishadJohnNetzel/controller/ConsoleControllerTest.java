@@ -134,4 +134,20 @@ public class ConsoleControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    public void shouldReturn422StatusCodeIfRequestIsInvalid() throws Exception {
+
+        mockMvc.perform(get("/consoles/test"))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+
+
+        mockMvc.perform(get("/consoles/four"))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+
+    }
+
 }

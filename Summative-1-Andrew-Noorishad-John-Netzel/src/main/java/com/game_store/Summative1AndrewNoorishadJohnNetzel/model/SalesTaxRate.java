@@ -15,10 +15,10 @@ import java.util.Objects;
 public class SalesTaxRate {
 
     @Id
-    @NotEmpty
+    @NotEmpty(message = "State cannot be null")
     @Column(unique = true)
     private String state;
-    @NotNull
+    @NotNull(message = "Rate cannot be null")
     private BigDecimal rate;
 
     public String getState() {

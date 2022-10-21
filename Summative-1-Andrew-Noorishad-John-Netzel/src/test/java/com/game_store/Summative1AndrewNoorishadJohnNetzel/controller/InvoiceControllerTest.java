@@ -121,4 +121,20 @@ public class InvoiceControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(outputJson));
     }
+
+    @Test
+    public void shouldReturn422StatusCodeIfRequestIsInvalid() throws Exception {
+
+        mockMvc.perform(get("/invoices/test"))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+
+
+        mockMvc.perform(get("/invoices/four"))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+
+    }
 }
