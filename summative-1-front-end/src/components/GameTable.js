@@ -24,6 +24,14 @@ function GameTable(props) {
         .then((responseBody) => setData(responseBody)))
     }, []);
 
+    function getRecordClass(row) {
+        const classes = ["record"];
+        if(activeRecordId === row.id) {
+            classes.push("active")
+        }
+        return classes.join(" ");
+    }
+
     function onRecordClick(row) {
         if(activeRecordId === row.id) {
             setActiveRecordId(0);
@@ -213,7 +221,7 @@ function GameTable(props) {
             </thead>
             <tbody>
                 {data.map(row =>
-                    <tr key={row.id} onClick={() => onRecordClick(row)}>
+                    <tr key={row.id} className={getRecordClass(row)} onClick={() => onRecordClick(row)}>
                         <td>{row.id}</td>
                         <td>{row.title}</td>
                         <td>{row.esrbRating}</td>
