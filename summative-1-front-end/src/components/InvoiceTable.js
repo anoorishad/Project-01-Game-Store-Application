@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import './Table.css';
 
 function InvoiceTable(props) {
+    const [idFilter, setIdFilter] = useState("");
+    const [nameFilter, setNameFilter] = useState("");
+
+    const [data, setData] = useState([]);
+
     const [name, setName] = useState("");
     const [street, setStreet] = useState("");
     const [city, setCity] = useState("");
@@ -11,60 +16,77 @@ function InvoiceTable(props) {
     const [itemType, setItemType] = useState("");
     const [itemId, setItemId] = useState("");
     const [quantity, setQuantity] = useState("");
-    
-    const [activeRecordId, setActiveRecordId] = useState(0);
 
-    function getRecordClass(row) {
-        const classes = ["record"];
-        if(activeRecordId === row.id) {
-            classes.push("active")
-        }
-        return classes.join(" ");
-    }
-
-    function onRecordClick(row) {
-        if(activeRecordId === row.id) {
-            setActiveRecordId(0);
-            setName("");
-            setStreet("");
-            setCity("");
-            setState("");
-            setZip("");
-            setItemType("");
-            setItemId("");
-            setQuantity("");
-        }
-        else {
-            setActiveRecordId(row.id);
-            setName(row.name);
-            setStreet(row.street);
-            setCity(row.city);
-            setState(row.state);
-            setZip(row.zip);
-            setItemType(row.itemType);
-            setItemId(row.itemId);
-            setQuantity(row.quantity);
-        }
-    }
+    useEffect(() => {
+        fetch("http://localhost:8080/invoices")
+        .then((response) => response.json()
+        .then((responseBody) => setData(responseBody)))
+    }, []);
 
     function onFormSubmit(e) {
         e.preventDefault(); // Don't forget this since we're not using the default form behavior
-        if(activeRecordId) {
-            fetch("/", {
-                method: "PUT",
-                body: {id: activeRecordId, name, street, city, state, zip, itemType, itemId, quantity}
-            }).then(() => console.log({id: activeRecordId, name, street, city, state, zip, itemType, itemId, quantity}));
+        fetch("http://localhost:8080/invoices", {
+            method: "POST",
+            body: JSON.stringify({name, street, city, state, zipcode: zip, itemType, itemId, quantity}),
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then((response) => {
+            if(response.ok) {
+                response.json().then(resData => setData([...data, resData]))
+            }
+            else {
+                alert("Error while creating record!");
+            }
+        });
+    }
+
+    function onFilterInvoicesById(e) {
+        e.preventDefault();
+        if(!idFilter) {
+            return;
         }
-        else {
-            fetch("/", {
-                method: "POST",
-                body: {name, street, city, state, zip, itemType, itemId, quantity}
-            }).then(() => console.log({name, street, city, state, zip, itemType, itemId, quantity}));
+        fetch("http://localhost:8080/invoices/" + idFilter)
+        .then(response => response.json()
+        .then(data => setData([data]))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+    }
+
+    function onFilterInvoicesByCustomerName(e) {
+        e.preventDefault();
+        if(!nameFilter) {
+            return;
         }
+        fetch("http://localhost:8080/invoices/name/" + nameFilter)
+        .then(response => response.json()
+        .then(data => setData(data))
+        .catch(err => {
+            console.error(err)
+            setData([]);
+        }));
+    }
+
+    function onClearInvoiceFilters() {
+        fetch("http://localhost:8080/invoices")
+        .then((response) => response.json()
+        .then((responseBody) => setData(responseBody)))
     }
 
     return <div>
         <h2>Invoices</h2>
+        <form onSubmit={onFilterInvoicesById}>
+            <label htmlFor="id-filter-input">Filter by ID</label>
+            <input name="id-filter-input" onChange={(e) => setIdFilter(e.target.value)} value={idFilter}></input>
+            <input type="submit" value="Filter"></input>
+        </form>
+        <form onSubmit={onFilterInvoicesByCustomerName}>
+            <label htmlFor="title-filter-input">Filter by Customer Name</label>
+            <input name="title-filter-input" onChange={(e) => setNameFilter(e.target.value)} value={nameFilter}></input>
+            <input type="submit" value="Filter"></input>
+        </form>
+        <button onClick={onClearInvoiceFilters}>Show All</button>
         <table>
             <thead>
                 <tr>
@@ -80,14 +102,14 @@ function InvoiceTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.tableData.map(row =>
-                    <tr key={row.id} className={getRecordClass(row)} onClick={() => onRecordClick(row)}>
+                {data.map(row =>
+                    <tr key={row.id}>
                         <td>{row.id}</td>
                         <td>{row.name}</td>
                         <td>{row.street}</td>
                         <td>{row.city}</td>
                         <td>{row.state}</td>
-                        <td>{row.zip}</td>
+                        <td>{row.zipcode}</td>
                         <td>{row.itemType}</td>
                         <td>{row.itemId}</td>
                         <td>{row.quantity}</td>
