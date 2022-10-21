@@ -25,6 +25,9 @@ public class ServiceLayerTest {
     TaxRateRepository taxRateRepository;
     InvoiceRepository invoiceRepository;
 
+    Invoice invoice;
+    Invoice invoice2;
+
     @Before
     public void setUp() throws Exception {
         setUpConsoleRepositoryMock();
@@ -150,36 +153,36 @@ public class ServiceLayerTest {
 
     private void setUpInvoiceRepositoryMock() {
         invoiceRepository= mock(InvoiceRepository.class);
-        Invoice invoice = new Invoice();
+        invoice = new Invoice();
         invoice.setId(1);
         invoice.setName("Andrew");
         invoice.setStreet("123 Street");
         invoice.setCity("Seattle");
         invoice.setState("WA");
         invoice.setZipcode("12345");
-        invoice.setItemType("Console");
+        invoice.setItemType("Consoles");
         invoice.setItemId(1);
         invoice.setUnitPrice(BigDecimal.valueOf(199.99));
         invoice.setQuantity(5);
-        invoice.setSubtotal(BigDecimal.valueOf(199.99));
-        invoice.setTax(BigDecimal.valueOf(11.99));
+        invoice.setSubtotal(BigDecimal.valueOf(999.95));
+        invoice.setTax(BigDecimal.valueOf(11.994));
         invoice.setProcessingFee(BigDecimal.valueOf(14.99));
-        invoice.setTotal(BigDecimal.valueOf(226.97));
+        invoice.setTotal(BigDecimal.valueOf(1026.934));
 
-        Invoice invoice2 = new Invoice();
-        invoice.setName("Andrew");
-        invoice.setStreet("123 Street");
-        invoice.setCity("Seattle");
-        invoice.setState("WA");
-        invoice.setZipcode("12345");
-        invoice.setItemType("Console");
-        invoice.setItemId(1);
-        invoice.setUnitPrice(BigDecimal.valueOf(199.99));
-        invoice.setQuantity(5);
-        invoice.setSubtotal(BigDecimal.valueOf(199.99));
-        invoice.setTax(BigDecimal.valueOf(11.99));
-        invoice.setProcessingFee(BigDecimal.valueOf(14.99));
-        invoice.setTotal(BigDecimal.valueOf(226.97));
+        invoice2 = new Invoice();
+        invoice2.setName("Andrew");
+        invoice2.setStreet("123 Street");
+        invoice2.setCity("Seattle");
+        invoice2.setState("WA");
+        invoice2.setZipcode("12345");
+        invoice2.setItemType("Consoles");
+        invoice2.setItemId(1);
+        invoice2.setUnitPrice(BigDecimal.valueOf(199.99));
+        invoice2.setQuantity(5);
+        invoice2.setSubtotal(BigDecimal.valueOf(999.95));
+        invoice2.setTax(BigDecimal.valueOf(11.99));
+        invoice2.setProcessingFee(BigDecimal.valueOf(14.99));
+        invoice2.setTotal(BigDecimal.valueOf(1026.934));
 
         doReturn(invoice).when(invoiceRepository).save(invoice2);
     }
@@ -204,6 +207,113 @@ public class ServiceLayerTest {
         BigDecimal expectedResult = BigDecimal.valueOf(9.99);
 
         BigDecimal actualResult = tShirtRepository.findById(1).get().getPrice();
+
+        assertEquals(expectedResult,actualResult);
+    }
+
+    @Test
+    public void shouldCalculateSalesTax() {
+        BigDecimal expectedResult = BigDecimal.valueOf(11.9994);
+
+        Optional<SalesTaxRate> taxRateRecord = taxRateRepository.findById(invoice.getState());
+        if(!taxRateRecord.isPresent()) { // If no sales tax record is found...
+            throw new RuntimeException("Cannot find sales tax rate for state: " + invoice.getState());
+        }
+        BigDecimal taxRate = taxRateRecord.get().getRate();
+
+        BigDecimal actualResult = invoice.getSubtotal().multiply(taxRate);
+
+        assertEquals(expectedResult,actualResult);
+    }
+
+    @Test
+    public void shouldCalculateProcessingFee() {
+        BigDecimal expectedResult = BigDecimal.valueOf(14.99);
+
+        Optional<ProcessingFee> processingFeeRecord = processingFeeRepository.findById(invoice.getItemType());
+
+        if(!processingFeeRecord.isPresent()) {
+            throw new RuntimeException("Cannot find processing for product type: " + invoice.getItemType());
+        }
+        BigDecimal processingFee = processingFeeRecord.get().getFee();
+        // Check for large (>10) orders
+        if(invoice.getQuantity() > 10) {
+            processingFee = processingFee.add(BigDecimal.valueOf(15.49));
+        }
+        invoice.setProcessingFee(processingFee); // Load value into invoice
+
+        BigDecimal actualResult = invoice.getProcessingFee();
+
+
+        assertEquals(expectedResult,actualResult);
+    }
+
+    @Test
+    public void shouldCalculateSubTotal() {
+        BigDecimal expectedResult = BigDecimal.valueOf(999.95);
+
+        BigDecimal itemPrice = invoice.getUnitPrice();
+        invoice.setUnitPrice(itemPrice);
+        BigDecimal subtotal = itemPrice.multiply(BigDecimal.valueOf(invoice.getQuantity()));
+        invoice.setSubtotal(subtotal);
+
+        BigDecimal actualResult = invoice.getSubtotal();
+
+        assertEquals(expectedResult,actualResult);
+    }
+
+
+    @Test
+    public void shouldCalculateTotal() {
+        BigDecimal expectedResult = BigDecimal.valueOf(1026.934);
+
+        BigDecimal total = invoice.getSubtotal();
+        total = total.add(invoice.getTax());
+        total = total.add(invoice.getProcessingFee());
+        invoice.setTotal(total);
+
+        BigDecimal actualResult = invoice.getTotal();
+
+        assertEquals(expectedResult,actualResult);
+    }
+
+    @Test
+    public void shouldUpdateInStockQuantity() {
+        Integer expectedResult = 5;
+
+        switch(invoice.getItemType()) {
+            case "Games":
+                Optional<Game> game = gameRepository.findById(invoice.getItemId());
+                if(game.isPresent()) {
+                    Game actualGame = game.get();
+                    actualGame.setQuantity(actualGame.getQuantity() - invoice.getQuantity());
+                    gameRepository.save(actualGame);
+                    break;
+                }
+                throw new RuntimeException("Game with ID of " + invoice.getItemId() + " not found!");
+            case "Consoles":
+                Optional<Console> console = consoleRepository.findById(invoice.getItemId());
+                if(console.isPresent()) {
+                    Console actualConsole = console.get();
+                    actualConsole.setQuantity(actualConsole.getQuantity() - invoice.getQuantity());
+                    consoleRepository.save(actualConsole);
+                    break;
+                }
+                throw new RuntimeException("Console with ID of " + invoice.getItemId() + " not found!");
+            case "T-shirts":
+                Optional<TShirt> tShirt = tShirtRepository.findById(invoice.getItemId());
+                if(tShirt.isPresent()) {
+                    TShirt actualTShirt = tShirt.get();
+                    actualTShirt.setQuantity(actualTShirt.getQuantity() - invoice.getQuantity());
+                    tShirtRepository.save(actualTShirt);
+                    break;
+                }
+                throw new RuntimeException("T-Shirt with ID of " + invoice.getItemId() + " not found!");
+            default:
+                throw new IllegalArgumentException("Invalid itemType: " + invoice.getItemType());
+        }
+        Optional<Console> optionalResult = consoleRepository.findById(invoice.getItemId());
+        Integer actualResult = optionalResult.get().getQuantity();
 
         assertEquals(expectedResult,actualResult);
     }
