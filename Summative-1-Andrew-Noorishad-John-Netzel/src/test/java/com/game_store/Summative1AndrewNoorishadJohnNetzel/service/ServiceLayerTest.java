@@ -170,9 +170,9 @@ public class ServiceLayerTest {
         invoice.setUnitPrice(BigDecimal.valueOf(199.99));
         invoice.setQuantity(5);
         invoice.setSubtotal(BigDecimal.valueOf(999.95));
-        invoice.setTax(BigDecimal.valueOf(11.994));
+        invoice.setTax(BigDecimal.valueOf(59.997));
         invoice.setProcessingFee(BigDecimal.valueOf(14.99));
-        invoice.setTotal(BigDecimal.valueOf(1026.934));
+        invoice.setTotal(BigDecimal.valueOf(1074.937));
 
         invoice2 = new Invoice();
         invoice2.setName("Andrew");
@@ -185,9 +185,9 @@ public class ServiceLayerTest {
         invoice2.setUnitPrice(BigDecimal.valueOf(199.99));
         invoice2.setQuantity(5);
         invoice2.setSubtotal(BigDecimal.valueOf(999.95));
-        invoice2.setTax(BigDecimal.valueOf(11.99));
+        invoice2.setTax(BigDecimal.valueOf(59.997));
         invoice2.setProcessingFee(BigDecimal.valueOf(14.99));
-        invoice2.setTotal(BigDecimal.valueOf(1026.934));
+        invoice2.setTotal(BigDecimal.valueOf(1074.937));
 
         doReturn(invoice).when(invoiceRepository).save(invoice2);
     }
@@ -218,7 +218,7 @@ public class ServiceLayerTest {
 
     @Test
     public void shouldCalculateSalesTax() {
-        BigDecimal expectedResult = BigDecimal.valueOf(11.9994);
+        BigDecimal expectedResult = BigDecimal.valueOf(59.997);
 
         Optional<SalesTaxRate> taxRateRecord = taxRateRepository.findById(invoice.getState());
         if(!taxRateRecord.isPresent()) { // If no sales tax record is found...
@@ -226,7 +226,9 @@ public class ServiceLayerTest {
         }
         BigDecimal taxRate = taxRateRecord.get().getRate();
 
-        BigDecimal actualResult = invoice.getSubtotal().multiply(taxRate);
+        Double actualResultDouble = (invoice.getSubtotal().multiply(taxRate).doubleValue());
+
+        BigDecimal actualResult = BigDecimal.valueOf(actualResultDouble);
 
         assertEquals(expectedResult,actualResult);
     }
@@ -293,7 +295,7 @@ public class ServiceLayerTest {
 
     @Test
     public void shouldCalculateTotal() {
-        BigDecimal expectedResult = BigDecimal.valueOf(1026.934);
+        BigDecimal expectedResult = BigDecimal.valueOf(1074.937);
 
         BigDecimal total = invoice.getSubtotal();
         total = total.add(invoice.getTax());
